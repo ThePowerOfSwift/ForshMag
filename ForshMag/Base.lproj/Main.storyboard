@@ -19,7 +19,7 @@
         <scene sceneID="Xwg-ds-YXL">
             <objects>
                 <tabBarController id="ewT-xP-i8W" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="Qdw-7V-jff">
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="Qdw-7V-jff">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -319,7 +319,7 @@
                         <viewControllerLayoutGuide type="bottom" id="dLA-JW-9LF"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7gx-c4-tl5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S5u-yG-wgF">
@@ -439,7 +439,7 @@
                         <viewControllerLayoutGuide type="bottom" id="uJh-8T-aLZ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pUB-R7-lYz">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="128" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nAQ-Wi-yA1">
@@ -502,7 +502,7 @@
                         <viewControllerLayoutGuide type="bottom" id="l8e-vZ-Jnh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7Iv-Fs-P2H">
-                        <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                        <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="160" sectionHeaderHeight="28" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="CPh-BU-uZn">
@@ -524,13 +524,13 @@
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#ОТДЫХАТЬ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsP-CM-hqC">
-                                                    <rect key="frame" x="155" y="14" width="104.66666666666669" height="24"/>
+                                                    <rect key="frame" x="155.33333333333337" y="14" width="104.66666666666663" height="24"/>
                                                     <fontDescription key="fontDescription" name="FiraSans-Regular" family="Fira Sans" pointSize="20"/>
                                                     <color key="textColor" red="0.42745098040000001" green="0.66274509800000003" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Маленький гид для большого города: 11-12 марта" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBC-U1-DN1">
-                                                    <rect key="frame" x="-10" y="42" width="434" height="20.666666666666664"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Маленький гид для большого города: 11-12 марта" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="8" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBC-U1-DN1">
+                                                    <rect key="frame" x="-10" y="42" width="434" height="20"/>
                                                     <fontDescription key="fontDescription" name="FiraSans-Regular" family="Fira Sans" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>

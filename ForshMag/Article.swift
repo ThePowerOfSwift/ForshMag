@@ -118,7 +118,7 @@ class Article {
     }
     
     func getHeader() {
-        let textView = UITextView(frame: CGRect(x: 0, y: 0, width: articleView.layer.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
+        let textView = UITextView(frame: CGRect(x: 0, y: 10, width: articleView.layer.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
         textView.attributedText = typography(style: "h1", text: header["text"]!)
         textView.sizeToFit()
         textView.backgroundColor = UIColor.clear
@@ -253,7 +253,7 @@ class Article {
     
     func removeSpecialCharsFromString(text: String) -> String {
         let okayChars : Set<Character> =
-            Set("абвгдеёзжиклмонпрстуфхцчьъшщыэюя АБВГДЕЁЖЗИКЛМОПРСТУФХЦЧШЩЬЪЫЭЮЯ1234567890+-*=(),.:!_".characters)
+            Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ абвгдеёзжиклмонпрстуфхцчьъшщыэюя АБВГДЕЁЖЗИКЛМОПРСТУФХЦЧШЩЬЪЫЭЮЯ1234567890+-*=(),.:!_".characters)
         return String(text.characters.filter {okayChars.contains($0) })
     }
     
