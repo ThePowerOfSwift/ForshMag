@@ -11,7 +11,6 @@ import Kanna
 import Alamofire
 
 
-
 class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
