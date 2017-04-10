@@ -12,11 +12,14 @@ import Alamofire
 
 class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    
     @IBOutlet weak var tableView: UITableView!
     var posts = [Post] ()
     var filtered = [Post] ()
     var isFiltered = false
+    var refreshControl: UIRefreshControl!
+    var loadMorePosts = false
+    static var imageCache: NSCache<NSString, UIImage> = NSCache ()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,104 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 134
+        refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Идет обновление...")
+        refreshControl.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refreshControl)
+        tableView.tableFooterView?.isHidden = true
+        parseJSON(page: "1")
+        
+        
+    }
+    
+    func refresh() {
+        DispatchQueue.global(qos: .background).async {
+            self.posts.removeAll()
+            self.parseJSON(page: "2")
+            
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+                self.isFiltered = false
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        let deltaOffset = maximumOffset - currentOffset
+        
+        if deltaOffset <= 0 {
+            //loadMore()
+        }
+    }
+    
+    func loadMore() {
+        print("Loading")
+        if ( !loadMorePosts ) {
+            self.loadMorePosts = true
+            //self.activityIndicator.startAnimating()
+            self.tableView.tableFooterView?.isHidden = false
+            DispatchQueue.global(qos: .background).async {
+                self.parse()
+                
+                DispatchQueue.main.async {
+                    self.refreshControl.endRefreshing()
+                    self.isFiltered = false
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func parseJSON (page: String) {
+        let parameters = ["per_page": 20, "page": page] as [String : Any]
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/", method: .get, parameters: parameters).responseJSON { response in
+            if let json = response.result.value! as? Array<Dictionary<String, Any>> {
+                for post in json {
+                    var postTemp: [String] = []
+                    if let link = post["link"] {
+                        postTemp.append(link as! String)
+                    }
+                    if let title = post["title"] as? Dictionary<String, Any> {
+                        if let rendered = title["rendered"] as? String{
+                            postTemp.append(rendered)
+                        }
+                    }
+                    if let mediaId = post["featured_media"] as? Int {
+                        print(mediaId)
+                        
+                            Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON(completionHandler: { (response) in
+                                if let json = response.result.value! as? Dictionary <String, Any> {
+                                    if let details = json["media_details"] as? Dictionary <String, Any> {
+                                        if let sizes = details["sizes"] as? Dictionary<String,Any> {
+                                            if let medium = sizes["medium"] as? Dictionary <String, Any> {
+                                                if let image = medium["source_url"] as? String {
+                                                    postTemp.append(image)
+                                                    let pos: Post
+                                                    pos = Post(title: postTemp[1], category: "", url: postTemp[0], type: "w", imgUrl: postTemp[2])
+                                                    self.posts.append(pos)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                                self.tableView.reloadData()
+                            })
+                            
+                        
+                    }
+                }
+            }
+            //self.tableView.reloadData()
+        }
+    }
+    
+    
+    
+    func parse () {
         Alamofire.request("http://forshmag.me/", method: .get).responseString { (response) in
             if let doc = Kanna.HTML(html: response.result.value!, encoding: String.Encoding.utf8) {
                 for mainloop in doc.css("#mainloop .item") {
@@ -70,7 +171,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
             self.tableView.reloadData()
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,21 +183,45 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         switch (post.postType) {
         case "w4":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                cell.configureCell(post: post)
+                if let img = FeedVC.imageCache.object(forKey: post.postImgUrl! as NSString) {
+                    cell.configureCell(post: post, img: img)
+                    print("Image cached")
+                } else {
+                    cell.configureCell(post: post)
+                    print("Image Loaded")
+                }
                 return cell
             } else {
                 return PostCell()
             }
         case "w":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw") as? PostCellw {
-                cell.configureCell(post: post)
+                if let imgUrl = post.postImgUrl {
+                    if let img = FeedVC.imageCache.object(forKey: imgUrl as NSString) {
+                        cell.configureCell(post: post, img: img)
+                        print("Image cached")
+                    } else {
+                        cell.configureCell(post: post)
+                        print("Image Loaded")
+                    }
+                } else {
+                    cell.configureCell(post: post)
+                    print("Image Loaded")
+                }
                 return cell
+                
             } else {
                 return PostCellw()
             }
         case "w2":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw2") as? PostCellw2 {
-                cell.configureCell(post: post)
+                if let img = FeedVC.imageCache.object(forKey: post.postImgUrl! as NSString) {
+                    cell.configureCell(post: post, img: img)
+                    print("Image cached")
+                } else {
+                    cell.configureCell(post: post)
+                    print("Image Loaded")
+                }
                 return cell
             } else {
                 return PostCellw2()
@@ -110,13 +234,13 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 return PostCell()
             }
         }
-
+        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
         var post: Post!
@@ -135,7 +259,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return posts.count
         }
     }
-
+    
     @IBAction func filterLearn(_ sender: Any) {
         isFiltered = true
         filtered = posts.filter({$0.postCategory == "#УЧИТЬСЯ"})

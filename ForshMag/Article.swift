@@ -9,6 +9,8 @@
 import Foundation
 import Kanna
 import UIKit
+import Alamofire
+import SwiftSoup
 
 class Article {
     
@@ -25,6 +27,73 @@ class Article {
         articleView.contentSize.height = 0
     }
     
+    func parseDate (date: String) -> String{
+        print(date)
+        var dateArg = date.components(separatedBy: "T")
+        dateArg = dateArg[0].components(separatedBy: "-")
+        return "\(dateArg[2]).\(dateArg[1]).\(dateArg[0])"
+    }
+    
+    func getCont (article: Dictionary<String,Any>) -> UIScrollView{
+        if let title = article["title"] as? Dictionary<String, Any> {
+            if let rendered = title["rendered"] as? String{
+                header["text"] = rendered
+                getHeader()
+            }
+        }
+        if let mediaId = article["featured_media"] as? Int {
+            Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON { response in
+                if let json = response.result.value! as? Dictionary <String, Any> {
+                    if let sizes = json["sizes"] as? Dictionary<String,Any> {
+                        if let medium = sizes["medium_large"] as? Dictionary <String, Any> {
+                            if let image = medium["source_url"] as? String {
+                                self.getImage(url: image, first: true)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if let date = article["date"] as? String {
+            let dataForView = parseDate(date: date)
+            header["date"] = dataForView
+            //getMeta()
+        }
+        if let authorId = article["author"] as? Int {
+            Alamofire.request("http://forshmag.me/wp-json/wp/v2/users/\(authorId)", method: .get).responseJSON(completionHandler: { response in
+                if let json = response.result.value as? Dictionary <String, Any> {
+                    if let author = json["name"] as? String {
+                        self.header["author"] = author
+                        self.getMeta()
+                    }
+                }
+            })
+        }
+        if let content = article["content"] as? Dictionary <String, Any> {
+            if let rendered = content["rendered"] as? String {
+                print(rendered)
+                getConte(content: rendered)
+            }
+        }
+        
+        return articleView
+    }
+    
+    func getConte (content: String) {
+        do{
+            let doc: Document = try! SwiftSoup.parse(content)
+            let cont: Elements = try! doc.select("img")
+            for element in cont {
+                let text: String = try! element.text()
+                print(text)
+            }
+        } catch Exception.Error(type: _, Message: let message){
+            print(message)
+        } catch {
+            print("error")
+        }
+    }
+    
     func getContent (article: XMLElement) -> UIScrollView{
         for element in article.css("h1, h2, p, img, li") {
             //print (element.tagName!)
@@ -32,7 +101,7 @@ class Article {
                 switch tag {
                 case "h1":
                     if let text = element.text {
-                        header["text"] = removeSpecialCharsFromString(text: text)
+                        header["text"] =  text
                         getHeader()
                     }
                 case "h2" :
@@ -74,11 +143,11 @@ class Article {
                 case "li":
                     if let className = element.className {
                         if className == "author" {
-                            header["author"] = removeSpecialCharsFromString(text: element.text!)
+                            header["author"] = element.text!
                         } else if className == "date" {
-                            header["date"] = removeSpecialCharsFromString(text: element.text!)
+                            header["date"] = element.text!
                         } else {
-                            header["category"] = removeSpecialCharsFromString(text: element.text!)
+                            header["category"] = element.text!
                             category = removeSpecialCharsFromString(text: element.text!)
                             getMeta()
                         }

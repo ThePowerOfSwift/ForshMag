@@ -8,4 +8,6 @@ target 'ForshMag' do
   # Pods for ForshMag
   pod ‘Alamofire’
   pod ‘Kanna’
+  pod ‘SwiftyJSON‘
+  pod ‘SwiftSoup‘
 end

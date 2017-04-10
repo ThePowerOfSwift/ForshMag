@@ -1,15 +1,21 @@
 PODS:
   - Alamofire (4.3.0)
   - Kanna (2.1.1)
+  - SwiftSoup (1.2.0)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - Alamofire
   - Kanna
+  - SwiftSoup
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
   Kanna: 9b4b086c218703f2b94f5b21a466217dd2f9332e
+  SwiftSoup: 1ac190457246df2d0d53fedf349dd2651e2b2858
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 4c058d493b80facc8090c1a65d8486cba7aa225a
+PODFILE CHECKSUM: 52fbf0e493ebff019f95c122544a307e9d11f71b
 
 COCOAPODS: 1.2.0

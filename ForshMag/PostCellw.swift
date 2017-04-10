@@ -23,17 +23,27 @@ class PostCellw: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func configureCell (post: Post) {
+    func configureCell (post: Post, img: UIImage? = nil) {
         self.postHeader.text = post.postTitle
         //self.categoriesLbl.text = post.postCategory
-        if post.postImgUrl != nil {
-            let url = NSURL(string: post.postImgUrl!)
-            let data = NSData(contentsOf: url! as URL)
-            let image = UIImage(data: data! as Data)
-            postImg.image = image
-            //self.postImg.image = maskImage(image: image!, withMask: self.postImg!)
-            
+        if img != nil {
+            postImg.image = img
+        } else {
+            if post.postImgUrl != nil {
+                let url = NSURL(string: post.postImgUrl!)
+                DispatchQueue.global().async {
+                    let data = try? Data(contentsOf: url! as URL)
+                    DispatchQueue.main.async {
+                        let image = UIImage(data: data!)
+                        self.postImg.image = image
+                        FeedVC.imageCache.setObject(image!, forKey: post.postImgUrl! as NSString)
+                    }
+                }
+            } else {
+                postImg.image = UIImage(named: "empty")
+            } 
         }
+        
     }
 
 }

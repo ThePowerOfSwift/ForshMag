@@ -9,6 +9,7 @@
 import UIKit
 
 class SettingsTableVC: UITableViewController {
+
     @IBOutlet weak var switchNotificationView: UISwitch!
 
     override func viewDidLoad() {
@@ -29,6 +30,26 @@ class SettingsTableVC: UITableViewController {
         } else {
             print ("off")
         }
+    }
+    
+    @IBAction func clearCache(_ sender: Any) {
+        let myOptionMenu = UIAlertController(title: nil, message: "Очистить кэш?", preferredStyle: .actionSheet)
+        
+        let clearAction = UIAlertAction(title: "Да", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            FeedVC.imageCache.removeAllObjects()
+            print("Clear")
+        })
+        let cancelAction = UIAlertAction(title: "Нет", style: .cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        myOptionMenu.addAction(cancelAction)
+        myOptionMenu.addAction(clearAction)
+        
+        present(myOptionMenu, animated: true, completion: nil)
+
+        
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {

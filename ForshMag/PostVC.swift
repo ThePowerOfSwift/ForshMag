@@ -50,12 +50,17 @@ class PostVC: UIViewController {
     }
 
     func parse () {
-        Alamofire.request(post.postURL, method: .get).responseString { (response) in
-            if let doc = Kanna.HTML(html: response.result.value!, encoding: String.Encoding.utf8) {
-                for article in doc.css("article") {
-                    self.mainView.addSubview(self.articleView.getContent(article: article))
-                    self.title = "#" + self.articleView.category.localizedUppercase
-                }
+//        Alamofire.request(post.postURL, method: .get).responseString { (response) in
+//            if let doc = Kanna.HTML(html: response.result.value!, encoding: String.Encoding.utf8) {
+//                for article in doc.css("article") {
+//                    self.mainView.addSubview(self.articleView.getContent(article: article))
+//                    self.title = "#" + self.articleView.category.localizedUppercase
+//                }
+//            }
+//        }
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/5045", method: .get).responseJSON { response in
+            if let json = response.result.value! as? Dictionary<String, Any> {
+                self.mainView.addSubview(self.articleView.getCont(article: json))
             }
         }
     }
