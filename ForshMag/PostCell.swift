@@ -45,7 +45,10 @@ class PostCell: UITableViewCell {
 //                        FeedVC.imageCache.setObject(image, forKey: post.postImgUrl! as NSString)
 //                    }
 //                }
+            } else {
+                postImg.image = UIImage(named: "empty")
             }
+            
         }
     }
 

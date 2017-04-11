@@ -58,7 +58,7 @@ class PostVC: UIViewController {
 //                }
 //            }
 //        }
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/5045", method: .get).responseJSON { response in
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.postURL)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
                 self.mainView.addSubview(self.articleView.getCont(article: json))
             }

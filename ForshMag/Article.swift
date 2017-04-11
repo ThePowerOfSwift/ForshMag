@@ -41,17 +41,9 @@ class Article {
                 getHeader()
             }
         }
-        if let mediaId = article["featured_media"] as? Int {
-            Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON { response in
-                if let json = response.result.value! as? Dictionary <String, Any> {
-                    if let sizes = json["sizes"] as? Dictionary<String,Any> {
-                        if let medium = sizes["medium_large"] as? Dictionary <String, Any> {
-                            if let image = medium["source_url"] as? String {
-                                self.getImage(url: image, first: true)
-                            }
-                        }
-                    }
-                }
+        if let acf = article["acf"] as? Dictionary<String, Any> {
+            if let headerImg = acf["header-image"] as? String {
+                getImage(url: headerImg, first: true)
             }
         }
         if let date = article["date"] as? String {
@@ -87,10 +79,6 @@ class Article {
                 let text: String = try! element.text()
                 print(text)
             }
-        } catch Exception.Error(type: _, Message: let message){
-            print(message)
-        } catch {
-            print("error")
         }
     }
     

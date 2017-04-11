@@ -81,46 +81,33 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func parseJSON (page: String) {
-        let parameters = ["per_page": 20, "page": page] as [String : Any]
+        let parameters = ["per_page": 10, "page": page] as [String : Any]
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/", method: .get, parameters: parameters).responseJSON { response in
             if let json = response.result.value! as? Array<Dictionary<String, Any>> {
                 for post in json {
-                    var postTemp: [String] = []
-                    if let link = post["link"] {
-                        postTemp.append(link as! String)
+                    var postTemp: Dictionary<String, String> = [:]
+                    if let link = post["id"] as? Int{
+                        postTemp["id"] =  "\(link)"
                     }
                     if let title = post["title"] as? Dictionary<String, Any> {
                         if let rendered = title["rendered"] as? String{
-                            postTemp.append(rendered)
+                            postTemp["title"] = rendered
+                        }
+                    }
+                    if let acf = post["acf"] as? Dictionary<String, Any> {
+                        if let thumb = acf["thumb-size"] as? String {
+                            postTemp["type"] = thumb
                         }
                     }
                     if let mediaId = post["featured_media"] as? Int {
-                        print(mediaId)
-                        
-                            Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON(completionHandler: { (response) in
-                                if let json = response.result.value! as? Dictionary <String, Any> {
-                                    if let details = json["media_details"] as? Dictionary <String, Any> {
-                                        if let sizes = details["sizes"] as? Dictionary<String,Any> {
-                                            if let medium = sizes["medium"] as? Dictionary <String, Any> {
-                                                if let image = medium["source_url"] as? String {
-                                                    postTemp.append(image)
-                                                    let pos: Post
-                                                    pos = Post(title: postTemp[1], category: "", url: postTemp[0], type: "w", imgUrl: postTemp[2])
-                                                    self.posts.append(pos)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
-                                }
-                                self.tableView.reloadData()
-                            })
-                            
-                        
+                        postTemp["mediaId"] = "\(mediaId)"
                     }
+                    let post = Post(title: postTemp["title"]!, category: "", url: postTemp["id"]!, type: postTemp["type"]!, imgUrl: nil)
+                    self.posts.append(post)
                 }
+
             }
-            //self.tableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
@@ -183,13 +170,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         switch (post.postType) {
         case "w4":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                if let img = FeedVC.imageCache.object(forKey: post.postImgUrl! as NSString) {
-                    cell.configureCell(post: post, img: img)
-                    print("Image cached")
-                } else {
-                    cell.configureCell(post: post)
-                    print("Image Loaded")
-                }
+//                if let img = FeedVC.imageCache.object(forKey: post.postImgUrl! as NSString) {
+//                    cell.configureCell(post: post, img: img)
+//                    print("Image cached")
+//                } else {
+//                    cell.configureCell(post: post)
+//                    print("Image Loaded")
+//                }
+                cell.configureCell(post: post)
                 return cell
             } else {
                 return PostCell()
@@ -215,13 +203,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
         case "w2":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw2") as? PostCellw2 {
-                if let img = FeedVC.imageCache.object(forKey: post.postImgUrl! as NSString) {
-                    cell.configureCell(post: post, img: img)
-                    print("Image cached")
-                } else {
-                    cell.configureCell(post: post)
-                    print("Image Loaded")
-                }
+//                if let img = FeedVC.imageCache.object(forKey: post.postImgUrl! as NSString) {
+//                    cell.configureCell(post: post, img: img)
+//                    print("Image cached")
+//                } else {
+//                    cell.configureCell(post: post)
+//                    print("Image Loaded")
+//                }
+                cell.configureCell(post: post)
                 return cell
             } else {
                 return PostCellw2()

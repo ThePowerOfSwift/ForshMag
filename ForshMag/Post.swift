@@ -40,7 +40,7 @@ class Post {
         self._postURL = url
         if (imgUrl != nil) {
             self._postImgUrl = imgUrl
-        }
+        } 
         self._postType = type
         self._postCategory = "#" + category.localizedUppercase
 
