@@ -7,19 +7,20 @@
 //
 
 import UIKit
+import Alamofire
 
 class PostCell: UITableViewCell {
     @IBOutlet weak var postImg: UIImageView!
     @IBOutlet weak var categoriesLbl: UILabel!
     @IBOutlet weak var postHeader: UILabel!
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
@@ -28,28 +29,33 @@ class PostCell: UITableViewCell {
         self.categoriesLbl.text = post.postCategory
         if img != nil {
             postImg.image = img
-        } else {
-            if post.postImgUrl != nil {
-                let url = NSURL(string: post.postImgUrl!)
-                DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url! as URL)
-                    DispatchQueue.main.async {
-                        let image = UIImage(data: data!)
-                        self.postImg.image = image
-                        FeedVC.imageCache.setObject(image!, forKey: post.postImgUrl! as NSString)
+        } else if let mediaId = post.postMediaId {
+            Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON(completionHandler: { (response) in
+                if let json = response.result.value as? Dictionary<String, Any> {
+                    if let media = json ["media_details"] as? Dictionary<String, Any> {
+                        if let sizes = media["sizes"] as? Dictionary<String, Any> {
+                            if let type = sizes[post.postType] as? Dictionary<String,Any>{
+                                if let imgUrl = type["source_url"] as? String {
+                                    let url = NSURL(string: imgUrl)
+                                    DispatchQueue.global().async {
+                                        let data = try? Data(contentsOf: url! as URL)
+                                        DispatchQueue.main.async {
+                                            let image = UIImage(data: data!)
+                                            self.postImg.image = image
+                                            FeedVC.imageCache.setObject(image!, forKey: "\(post.postMediaId!)" as NSString)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-//                if let data = NSData(contentsOf: url! as URL) {
-//                    if let image = UIImage(data: data as Data) {
-//                        postImg.image = image
-//                        FeedVC.imageCache.setObject(image, forKey: post.postImgUrl! as NSString)
-//                    }
-//                }
-            } else {
-                postImg.image = UIImage(named: "empty")
-            }
-            
+            })
+        } else {
+            postImg.image = UIImage(named: "empty")
         }
+        
     }
-
 }
+
+

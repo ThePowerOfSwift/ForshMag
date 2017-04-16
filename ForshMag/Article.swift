@@ -34,7 +34,7 @@ class Article {
         return "\(dateArg[2]).\(dateArg[1]).\(dateArg[0])"
     }
     
-    func getCont (article: Dictionary<String,Any>) -> UIScrollView{
+    func getContentJSON (article: Dictionary<String,Any>) -> UIScrollView{
         if let title = article["title"] as? Dictionary<String, Any> {
             if let rendered = title["rendered"] as? String{
                 header["text"] = rendered
@@ -63,26 +63,40 @@ class Article {
         }
         if let content = article["content"] as? Dictionary <String, Any> {
             if let rendered = content["rendered"] as? String {
-                print(rendered)
-                getConte(content: rendered)
+                getContent(content: rendered)
             }
         }
         
         return articleView
     }
     
-    func getConte (content: String) {
+    func getContent (content: String) {
         do{
             let doc: Document = try! SwiftSoup.parse(content)
-            let cont: Elements = try! doc.select("img")
+            let cont: Elements = try! doc.select("h2, p, img")
             for element in cont {
-                let text: String = try! element.text()
-                print(text)
+                switch element.tagName() {
+                case "p":
+                    let text: String = try! element.text()
+                    getText(text: text, style: element.tagName())
+                case "h2":
+                    let text: String = try! element.text()
+                    getText(text: text, style: element.tagName())
+                case "img":
+                    print(try! element.toString())
+                    let attr: String = try! element.attr("src")
+                    if attr != "" {
+                        getImage(url: attr, first: nil)
+                    }
+                default:
+                    let text: String = try! element.text()
+                    getText(text: text, style: element.tagName())
+                }
             }
         }
     }
     
-    func getContent (article: XMLElement) -> UIScrollView{
+    func getContentHTML (article: XMLElement) -> UIScrollView{
         for element in article.css("h1, h2, p, img, li") {
             //print (element.tagName!)
             if let tag = element.tagName {
@@ -104,7 +118,9 @@ class Article {
                                 getImage(url: urlStr, first: true)
                             }
                         } else if let urlStr = element["src"] {
-                            getImage(url: urlStr, first: nil)
+                            if urlStr != "" {
+                                getImage(url: urlStr, first: nil)
+                            }
                         }
                     }
                 case "p":
@@ -299,7 +315,7 @@ class Article {
             return attributedText
         default:
             let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Noto Sans", size: 14.0)!], range: NSRange(location:0, length:1))
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Noto Sans", size: 14.0)!], range: NSRange(location:0, length: attributedText.length))
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 4
             attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))

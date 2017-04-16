@@ -38,7 +38,7 @@ class AboutVC: UIViewController{
         Alamofire.request("http://forshmag.me/about/", method: .get).responseString { (response) in
             if let doc = Kanna.HTML(html: response.result.value!, encoding: String.Encoding.utf8) {
                 for article in doc.css("article") {
-                    self.mainView.addSubview(self.articleView.getContent(article: article))
+                    self.mainView.addSubview(self.articleView.getContentHTML(article: article))
                 }
             }
         }

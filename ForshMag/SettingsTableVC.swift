@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SettingsTableVC: UITableViewController {
 
@@ -63,6 +64,11 @@ class SettingsTableVC: UITableViewController {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
     }
 
+    @IBAction func showImpactHub(_ sender: Any) {
+        let url = NSURL(string: "https://impacthub.odessa.ua/")
+        let svc = SFSafariViewController(url: url! as URL)
+        present(svc, animated: true, completion: nil)
+    }
     // MARK: - Table view data source
 
 //    override func numberOfSections(in tableView: UITableView) -> Int {

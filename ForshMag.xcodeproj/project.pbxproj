@@ -23,6 +23,8 @@
 		22C000FF1E856A720030DCD9 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22C000FE1E856A720030DCD9 /* NotoSans-Bold.ttf */; };
 		22C001021E856AC70030DCD9 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22C001011E856AC70030DCD9 /* NotoSans-Regular.ttf */; };
 		22C001041E85790B0030DCD9 /* Lora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22C001031E85790B0030DCD9 /* Lora-Bold.ttf */; };
+		22E9F59C1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E9F59A1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift */; };
+		22E9F59D1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E9F59B1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift */; };
 		22F1A0001E7424040075A247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F19FFF1E7424040075A247 /* AppDelegate.swift */; };
 		22F1A0021E7424040075A247 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F1A0011E7424040075A247 /* FeedVC.swift */; };
 		22F1A0051E7424040075A247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22F1A0031E7424040075A247 /* Main.storyboard */; };
@@ -49,6 +51,8 @@
 		22C000FE1E856A720030DCD9 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
 		22C001011E856AC70030DCD9 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
 		22C001031E85790B0030DCD9 /* Lora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-Bold.ttf"; sourceTree = "<group>"; };
+		22E9F59A1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Favourite+CoreDataClass.swift"; sourceTree = "<group>"; };
+		22E9F59B1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Favourite+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		22F19FFC1E7424040075A247 /* ForshMag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForshMag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F19FFF1E7424040075A247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22F1A0011E7424040075A247 /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 		227D86151E759927006DCF6B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				22E9F59A1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift */,
+				22E9F59B1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift */,
 				22F1A0061E7424040075A247 /* ForshMag.xcdatamodeld */,
 				22344EA11E83E78500C5EC7B /* Article.swift */,
 				2296E3271E8FCECA00F2CC93 /* Post.swift */,
@@ -303,9 +309,11 @@
 			files = (
 				22344EA21E83E78500C5EC7B /* Article.swift in Sources */,
 				2296E32C1E90050F00F2CC93 /* PostCellw2.swift in Sources */,
+				22E9F59D1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift in Sources */,
 				22A716E91E76E19800077C72 /* PostVC.swift in Sources */,
 				22F1A0021E7424040075A247 /* FeedVC.swift in Sources */,
 				22F1A0081E7424040075A247 /* ForshMag.xcdatamodeld in Sources */,
+				22E9F59C1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift in Sources */,
 				22F1A0001E7424040075A247 /* AppDelegate.swift in Sources */,
 				22782CDE1E7EC28200A8A7B1 /* SettingsTableVC.swift in Sources */,
 				228F33661E7C3587004E96B8 /* AboutVC.swift in Sources */,
