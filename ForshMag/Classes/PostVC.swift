@@ -27,25 +27,18 @@ class PostVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         isInFavourite()
-        let shareBtn = UIBarButtonItem(image: UIImage(named: "Share"), style: .plain, target: self, action: #selector(share))
-        rightBars.append(shareBtn)
-        var faveBtn: UIBarButtonItem
-        if isFavourite {
-            faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-added"), style: .plain, target: self, action: #selector(addToFavourite))
-        } else {
-            faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-add"), style: .plain, target: self, action: #selector(addToFavourite))
-        }
-        rightBars.append(faveBtn)
-        self.navigationItem.rightBarButtonItems = rightBars
+        articleView = Article (bounds: mainView.bounds)
+        parse ()
+
     }
     func addToFavourite () {
         if isFavourite {
             context.delete(currentPost!)
+            ad.saveContext()
             print("fav delete")
             var faveBtn: UIBarButtonItem
             faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-add"), style: .plain, target: self, action: #selector(addToFavourite))
-            self.navigationItem.setRightBarButtonItems([(self.navigationItem.rightBarButtonItems?.first)!, faveBtn], animated: true)
-            
+            self.navigationItem.setRightBarButtonItems([(self.navigationItem.rightBarButtonItems?.first)!, faveBtn], animated: true)            
         } else {
             let fav = Favourite(context: context)
             fav.id = Int16(post.postURL)
@@ -60,6 +53,10 @@ class PostVC: UIViewController {
     
     func isInFavourite() {
         let fetchRequest: NSFetchRequest<Favourite> = Favourite.fetchRequest()
+        var shareBtn = UIBarButtonItem()
+        var faveBtn = UIBarButtonItem()
+        shareBtn = UIBarButtonItem(image: UIImage(named: "Share"), style: .plain, target: self, action: #selector(share))
+        rightBars.append(shareBtn)
         do {
             let po = try context.fetch(fetchRequest)
             for i in po {
@@ -67,14 +64,23 @@ class PostVC: UIViewController {
                     currentPost = i
                     isFavourite = true
                     print ("yes")
+                    break
+                    //faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-added"), style: .plain, target: self, action: #selector(addToFavourite))
                 } else {
                     isFavourite = false
+                    //faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-add"), style: .plain, target: self, action: #selector(addToFavourite))
                 }
             }
-            
         } catch {
             
         }
+        if isFavourite {
+            faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-added"), style: .plain, target: self, action: #selector(addToFavourite))
+        } else {
+            faveBtn = UIBarButtonItem(image: UIImage(named: "Favourite-add"), style: .plain, target: self, action: #selector(addToFavourite))
+        }
+        rightBars.append(faveBtn)
+        self.navigationItem.rightBarButtonItems = rightBars
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -89,9 +95,8 @@ class PostVC: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print(mainView.bounds.width)
-        articleView = Article (bounds: mainView.bounds)
-        parse ()
+        //articleView = Article (bounds: mainView.bounds)
+        //parse ()
 
     }
 

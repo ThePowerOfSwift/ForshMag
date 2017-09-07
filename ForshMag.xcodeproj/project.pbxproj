@@ -35,27 +35,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		22344EA11E83E78500C5EC7B /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
-		22782CDD1E7EC28200A8A7B1 /* SettingsTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableVC.swift; sourceTree = "<group>"; };
-		227D860C1E757C2F006DCF6B /* FiraSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Regular.ttf"; sourceTree = "<group>"; };
-		227D86101E757C4F006DCF6B /* FiraSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Light.ttf"; sourceTree = "<group>"; };
-		227D86121E7595C7006DCF6B /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
-		227D86181E759E20006DCF6B /* PostCellw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCellw.swift; sourceTree = "<group>"; };
-		228F33631E7C3579004E96B8 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
-		228F33651E7C3587004E96B8 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
-		228F33671E7C35C6004E96B8 /* FavouriteVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavouriteVC.swift; sourceTree = "<group>"; };
-		2296E3271E8FCECA00F2CC93 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		2296E32B1E90050F00F2CC93 /* PostCellw2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCellw2.swift; sourceTree = "<group>"; };
-		22A716E81E76E19800077C72 /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
-		22B2A2A11E841EFA00C5FB80 /* Lora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-Regular.ttf"; sourceTree = "<group>"; };
-		22C000FE1E856A720030DCD9 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
-		22C001011E856AC70030DCD9 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
-		22C001031E85790B0030DCD9 /* Lora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lora-Bold.ttf"; sourceTree = "<group>"; };
-		22E9F59A1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Favourite+CoreDataClass.swift"; sourceTree = "<group>"; };
-		22E9F59B1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Favourite+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		22344EA11E83E78500C5EC7B /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Article.swift; path = Classes/Article.swift; sourceTree = "<group>"; };
+		22782CDD1E7EC28200A8A7B1 /* SettingsTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsTableVC.swift; path = Classes/SettingsTableVC.swift; sourceTree = "<group>"; };
+		227D860C1E757C2F006DCF6B /* FiraSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FiraSans-Regular.ttf"; path = "Resources/FiraSans-Regular.ttf"; sourceTree = "<group>"; };
+		227D86101E757C4F006DCF6B /* FiraSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FiraSans-Light.ttf"; path = "Resources/FiraSans-Light.ttf"; sourceTree = "<group>"; };
+		227D86121E7595C7006DCF6B /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostCell.swift; path = Classes/PostCell.swift; sourceTree = "<group>"; };
+		227D86181E759E20006DCF6B /* PostCellw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostCellw.swift; path = Classes/PostCellw.swift; sourceTree = "<group>"; };
+		228F33631E7C3579004E96B8 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsVC.swift; path = Classes/SettingsVC.swift; sourceTree = "<group>"; };
+		228F33651E7C3587004E96B8 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AboutVC.swift; path = Classes/AboutVC.swift; sourceTree = "<group>"; };
+		228F33671E7C35C6004E96B8 /* FavouriteVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavouriteVC.swift; path = Classes/FavouriteVC.swift; sourceTree = "<group>"; };
+		2296E3271E8FCECA00F2CC93 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Post.swift; path = Classes/Post.swift; sourceTree = "<group>"; };
+		2296E32B1E90050F00F2CC93 /* PostCellw2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostCellw2.swift; path = Classes/PostCellw2.swift; sourceTree = "<group>"; };
+		22A716E81E76E19800077C72 /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostVC.swift; path = Classes/PostVC.swift; sourceTree = "<group>"; };
+		22B2A2A11E841EFA00C5FB80 /* Lora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lora-Regular.ttf"; path = "Resources/Lora-Regular.ttf"; sourceTree = "<group>"; };
+		22C000FE1E856A720030DCD9 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSans-Bold.ttf"; path = "Resources/NotoSans-Bold.ttf"; sourceTree = "<group>"; };
+		22C001011E856AC70030DCD9 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSans-Regular.ttf"; path = "Resources/NotoSans-Regular.ttf"; sourceTree = "<group>"; };
+		22C001031E85790B0030DCD9 /* Lora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lora-Bold.ttf"; path = "Resources/Lora-Bold.ttf"; sourceTree = "<group>"; };
+		22E9F59A1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Favourite+CoreDataClass.swift"; path = "Classes/Favourite+CoreDataClass.swift"; sourceTree = "<group>"; };
+		22E9F59B1EA3C56B0056F6B9 /* Favourite+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Favourite+CoreDataProperties.swift"; path = "Classes/Favourite+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		22F19FFC1E7424040075A247 /* ForshMag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForshMag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F19FFF1E7424040075A247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		22F1A0011E7424040075A247 /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
+		22F1A0011E7424040075A247 /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedVC.swift; path = Classes/FeedVC.swift; sourceTree = "<group>"; };
 		22F1A0041E7424040075A247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		22F1A0071E7424040075A247 /* ForshMag.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ForshMag.xcdatamodel; sourceTree = "<group>"; };
 		22F1A0091E7424040075A247 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -445,11 +445,14 @@
 			baseConfigurationReference = 535054AA97A42FED9E74A050 /* Pods-ForshMag.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TGE7YRQW2V;
 				INFOPLIST_FILE = ForshMag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tim.ForshMag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -459,11 +462,14 @@
 			baseConfigurationReference = E2D67EE644D8709F1EA5B400 /* Pods-ForshMag.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TGE7YRQW2V;
 				INFOPLIST_FILE = ForshMag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tim.ForshMag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
