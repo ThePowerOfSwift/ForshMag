@@ -19,6 +19,7 @@
 		2296E3281E8FCECA00F2CC93 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2296E3271E8FCECA00F2CC93 /* Post.swift */; };
 		2296E32C1E90050F00F2CC93 /* PostCellw2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2296E32B1E90050F00F2CC93 /* PostCellw2.swift */; };
 		22A4CE281F7124B200E80103 /* PostCellFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A4CE271F7124B200E80103 /* PostCellFactory.swift */; };
+		22A4CE2B1F712A0000E80103 /* ForshMagAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A4CE2A1F712A0000E80103 /* ForshMagAPI.swift */; };
 		22A716E91E76E19800077C72 /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A716E81E76E19800077C72 /* PostVC.swift */; };
 		22B2A2A21E841EFA00C5FB80 /* Lora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B2A2A11E841EFA00C5FB80 /* Lora-Regular.ttf */; };
 		22C000FF1E856A720030DCD9 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22C000FE1E856A720030DCD9 /* NotoSans-Bold.ttf */; };
@@ -48,6 +49,7 @@
 		2296E3271E8FCECA00F2CC93 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Post.swift; path = Classes/Post.swift; sourceTree = "<group>"; };
 		2296E32B1E90050F00F2CC93 /* PostCellw2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostCellw2.swift; path = Classes/PostCellw2.swift; sourceTree = "<group>"; };
 		22A4CE271F7124B200E80103 /* PostCellFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostCellFactory.swift; path = Classes/PostCellFactory.swift; sourceTree = "<group>"; };
+		22A4CE2A1F712A0000E80103 /* ForshMagAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForshMagAPI.swift; sourceTree = "<group>"; };
 		22A716E81E76E19800077C72 /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostVC.swift; path = Classes/PostVC.swift; sourceTree = "<group>"; };
 		22B2A2A11E841EFA00C5FB80 /* Lora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lora-Regular.ttf"; path = "Resources/Lora-Regular.ttf"; sourceTree = "<group>"; };
 		22C000FE1E856A720030DCD9 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSans-Bold.ttf"; path = "Resources/NotoSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -144,6 +146,14 @@
 			name = Protocol;
 			sourceTree = "<group>";
 		};
+		22A4CE291F7129D000E80103 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				22A4CE2A1F712A0000E80103 /* ForshMagAPI.swift */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
 		22F19FF31E7424040075A247 = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +175,7 @@
 		22F19FFE1E7424040075A247 /* ForshMag */ = {
 			isa = PBXGroup;
 			children = (
+				22A4CE291F7129D000E80103 /* API */,
 				22A4CE261F71248A00E80103 /* Protocol */,
 				227D86171E75993A006DCF6B /* Controller */,
 				227D86151E759927006DCF6B /* Model */,
@@ -339,6 +350,7 @@
 				22E9F59C1EA3C56B0056F6B9 /* Favourite+CoreDataClass.swift in Sources */,
 				22F1A0001E7424040075A247 /* AppDelegate.swift in Sources */,
 				22782CDE1E7EC28200A8A7B1 /* SettingsTableVC.swift in Sources */,
+				22A4CE2B1F712A0000E80103 /* ForshMagAPI.swift in Sources */,
 				228F33661E7C3587004E96B8 /* AboutVC.swift in Sources */,
 				2296E3281E8FCECA00F2CC93 /* Post.swift in Sources */,
 				227D86131E7595C7006DCF6B /* PostCell.swift in Sources */,

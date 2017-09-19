@@ -55,35 +55,9 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func parseJSON (page: String) {
-        let parameters = ["per_page": 10, "page": page] as [String : Any]
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/", method: .get, parameters: parameters).responseJSON { response in
-            if let json = response.result.value! as? Array<Dictionary<String, Any>> {
-                for post in json {
-                    var postTemp: Dictionary<String, Any> = [:]
-                    if let link = post["id"] as? Int{
-                        postTemp["id"] =  link
-                    }
-                    if let title = post["title"] as? Dictionary<String, Any> {
-                        if let rendered = title["rendered"] as? String{
-                            postTemp["title"] = rendered
-                        }
-                    }
-                    if let acf = post["acf"] as? Dictionary<String, Any> {
-                        if let thumb = acf["thumb-size"] as? String {
-                            postTemp["type"] = thumb
-                        }
-                    }
-                    if let mediaId = post["featured_media"] as? Int {
-                        postTemp["mediaId"] = mediaId
-                    }
-                    if let categories = post["categories"] as? Array<Int> {
-                        postTemp["categories"] = categories[0]
-                    }
-                    let post = Post(title: postTemp["title"]! as! String, category: postTemp["categories"] as! Int, url: postTemp["id"] as! Int, type: postTemp["type"]! as! String, mediaId: postTemp["mediaId"] as? Int)
-                    self.posts.append(post)
-                }
-                
-            }
+        let api = ForshMagAPI()
+        api.getFeed(forPage: page) { feed in
+            self.posts = feed
             self.tableView.reloadData()
         }
     }
@@ -144,10 +118,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else {
             return UITableViewCell()
         }
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
