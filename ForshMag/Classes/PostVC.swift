@@ -8,20 +8,15 @@
 
 import UIKit
 import Alamofire
-import Kanna
 import CoreData
 
 class PostVC: UIViewController {
     @IBOutlet weak var mainView: UIView!
     
     var post: Post!
-    
     var articleView: Article!
-
     var rightBars: [UIBarButtonItem] = []
-    
     var isFavourite: Bool = false
-    
     var currentPost : Favourite?
     
     override func viewDidLoad() {
@@ -29,8 +24,8 @@ class PostVC: UIViewController {
         isInFavourite()
         articleView = Article (bounds: mainView.bounds)
         parse ()
-
     }
+    
     func addToFavourite () {
         if isFavourite {
             context.delete(currentPost!)
@@ -97,18 +92,9 @@ class PostVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         //articleView = Article (bounds: mainView.bounds)
         //parse ()
-
     }
 
     func parse () {
-//        Alamofire.request(post.postURL, method: .get).responseString { (response) in
-//            if let doc = Kanna.HTML(html: response.result.value!, encoding: String.Encoding.utf8) {
-//                for article in doc.css("article") {
-//                    self.mainView.addSubview(self.articleView.getContentHTML(article: article))
-//                    self.title = "#" + self.articleView.category.localizedUppercase
-//                }
-//            }
-//        }
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.postURL)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
                 self.mainView.addSubview(self.articleView.getContentJSON(article: json))
@@ -116,10 +102,4 @@ class PostVC: UIViewController {
             }
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }

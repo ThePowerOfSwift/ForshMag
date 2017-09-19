@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Kanna
 import Alamofire
 
 class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -29,15 +28,15 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 134
+        
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Идет обновление...")
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+        
         tableView.addSubview(refreshControl)
         tableView.tableFooterView?.isHidden = true
+        
         parseJSON(page: "\(currentPage)")
-        //parse()
-        
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -102,6 +101,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             self.tableView.reloadData()
         }
     }
+    
     //RES FUNC
     func loadImage (type: String, mediaId: Int, completion: @escaping (String) -> ()) {
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON(completionHandler: { (response) in
@@ -206,55 +206,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         performSegue(withIdentifier: "PostVC", sender: post)
     }
     
-    func parse () {
-        print("ALAH")
-        //        Alamofire.request("http://forshmag.me/", method: .get).responseString { (response) in
-        //            if let doc = Kanna.HTML(html: response.result.value!, encoding: String.Encoding.utf8) {
-        //                for mainloop in doc.css("#mainloop .item") {
-        //                    var post: [String] = []
-        //                    for css in mainloop.css("span"){
-        //                        if let title = css.text {
-        //                            //print(title)
-        //                            post.append(title)
-        //                        }
-        //                        if let category = css["data-cat-name"]{
-        //                            //print(category)
-        //                            post.append(category)
-        //                        }
-        //                    }
-        //                    for css in mainloop.css("a"){
-        //                        if let url = css["href"] {
-        //                            //print(url)
-        //                            post.append(url)
-        //                        }
-        //
-        //                    }
-        //                    if let className = mainloop.className {
-        //                        let showString = className.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        //                        let showStringArr = showString.components(separatedBy: " ")
-        //                        post.append(showStringArr[2])
-        //                    }
-        //                    for css in mainloop.css("img"){
-        //                        if let imgUrl = css["src"] {
-        //                            //print (imgUrl)
-        //                            post.append(imgUrl)
-        //                        }
-        //                    }
-        //                    let pos: Post
-        //                    if post.count == 4 {
-        //                        pos = Post(title: post[0], category: post[1], url: post[2], type: post[3], mediaId: nil)
-        //                    } else {
-        //                        pos = Post(title: post[0], category: post[1], url: post[2], type: post[3], mediaId: post[4])
-        //
-        //                    }
-        //                    self.posts.append(pos)
-        //                }
-        //            }
-        //            self.tableView.reloadData()
-        //        }
-    }
-    
-    
     @IBAction func filterLearn(_ sender: Any) {
         isFiltered = true
         filtered = posts.filter({$0.postCategory == "#УЧИТЬСЯ"})
@@ -271,6 +222,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         filtered = posts.filter({$0.postCategory == "#ОТДЫХАТЬ"})
         tableView.reloadData()
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PostVC" {
             if let detailVC = segue.destination as? PostVC {

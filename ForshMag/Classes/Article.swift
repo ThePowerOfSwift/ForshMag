@@ -7,19 +7,16 @@
 //
 
 import Foundation
-import Kanna
 import UIKit
 import Alamofire
+import Kanna
 import SwiftSoup
 
 class Article {
     
     var articleView = UIScrollView ()
-    
     var category: String!
-    
     var header: Dictionary <String, String> = [:]
-    
     var height: CGFloat!
     
     init(bounds: CGRect) {
@@ -174,14 +171,15 @@ class Article {
         block.layer.zPosition = 1
         block.center = CGPoint (x: articleView.layer.frame.width/2, y: CGFloat(calculateHeightView()))
         articleView.addSubview(block)
+        
         let textView = UITextView(frame: CGRect(x: 15, y: CGFloat(calculateHeightView()+block.frame.height), width: articleView.layer.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
         textView.attributedText = typography(style: "excerpt", text: text)
         textView.sizeToFit()
-        //textView.backgroundColor = UIColor.red
         textView.isScrollEnabled = false
         textView.isEditable = false
         textView.frame = CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.layer.frame.size.width-30, height: textView.frame.height)
         articleView.addSubview(textView)
+        
         let block2 = UIView(frame: CGRect(x: 0, y: CGFloat(calculateHeightView()+textView.frame.height+block.frame.height), width: articleView.layer.frame.width/6, height: 5))
         block2.backgroundColor = UIColor.init(netHex: 0x6DA96D)
         block2.layer.zPosition = 1
@@ -222,7 +220,6 @@ class Article {
         let textView = UITextView(frame: CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.layer.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
         textView.attributedText = typography(style: style, text: text)
         textView.sizeToFit()
-        //textView.backgroundColor = UIColor.red
         textView.isScrollEnabled = false
         textView.isEditable = false
         textView.frame = CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.layer.frame.size.width-30, height: textView.frame.height)
@@ -236,7 +233,6 @@ class Article {
     }
     
     func getImage (url: String, first: Bool?){
-        
         let url = NSURL(string: url)
         let data = NSData(contentsOf: url! as URL)
         let image = UIImageView()
@@ -268,11 +264,6 @@ class Article {
     }
     
     func calculateHeightView () -> CGFloat{
-        //        let array = articleView.subviews
-        //        for view in array {
-        //            height += Int(view.bounds.maxY)
-        //            height += 20
-        //        }
         return articleView.contentSize.height + 20
     }
     

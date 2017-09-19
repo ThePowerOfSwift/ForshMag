@@ -12,7 +12,6 @@ import Kanna
 
 class AboutVC: UIViewController{
     @IBOutlet weak var mainView: UIView!
-    //@IBOutlet weak var mainView: UIScrollView!
     var articleView: Article! = nil
     
     override func viewDidLoad() {
@@ -24,10 +23,6 @@ class AboutVC: UIViewController{
     override func viewDidAppear(_ animated: Bool) {
         articleView = Article (bounds: mainView.bounds)
         parse()
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func backBtnTapped(_ sender: Any) {
