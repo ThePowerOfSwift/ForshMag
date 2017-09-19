@@ -44,7 +44,7 @@ class Post {
         } 
         self._postType = type
         
-        self._postCategory = _categories[category-1]
+        self._postCategory = _categories[category - 1]
 
     }
 }

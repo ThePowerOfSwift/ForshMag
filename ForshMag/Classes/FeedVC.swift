@@ -15,6 +15,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     var refreshControl: UIRefreshControl!
     static var imageCache: NSCache<NSString, UIImage> = NSCache ()
+    let api = ForshMagAPI()
     
     private var posts = [Post] ()
     private var filtered = [Post] ()
@@ -55,9 +56,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func parseJSON (page: String) {
-        let api = ForshMagAPI()
         api.getFeed(forPage: page) { feed in
-            self.posts = feed
+            self.posts += feed
             self.tableView.reloadData()
         }
     }
@@ -121,7 +121,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (indexPath.row == self.posts.count - 1 ) {
+        if (indexPath.row == self.posts.count - 1) {
             currentPage += 1
             parseJSON(page: "\(currentPage)")
         }
