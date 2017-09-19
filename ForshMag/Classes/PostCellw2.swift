@@ -9,9 +9,9 @@
 import UIKit
 import Alamofire
 
-class PostCellw2: UITableViewCell {
+class PostCellw2: UITableViewCell, PostCellProtocol {
     
-
+    
     @IBOutlet weak var postImg: UIImageView!
     @IBOutlet weak var postHeader: UILabel!
     @IBOutlet weak var categoryLbl: UILabel!
@@ -25,6 +25,14 @@ class PostCellw2: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
+    }
+    
+    static func make() -> PostCellProtocol {
+        return PostCellw2()
+    }
+    
+    func name() -> String {
+        return "PostCellw2"
     }
     
     func configureCell (post: Post, img: UIImage? = nil, imgURL: String? = nil) {
@@ -62,3 +70,4 @@ class PostCellw2: UITableViewCell {
     }
     
 }
+

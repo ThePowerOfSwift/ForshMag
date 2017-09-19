@@ -9,17 +9,18 @@
 import UIKit
 import Alamofire
 
+
 class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
-    var posts = [Post] ()
-    var filtered = [Post] ()
-    var isFiltered = false
     var refreshControl: UIRefreshControl!
-    var loadMorePosts = false
     static var imageCache: NSCache<NSString, UIImage> = NSCache ()
-    var currentPage = 1
     
+    private var posts = [Post] ()
+    private var filtered = [Post] ()
+    private var isFiltered = false
+    private var loadMorePosts = false
+    private var currentPage = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,14 +40,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         parseJSON(page: "\(currentPage)")
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltered {
-            return filtered.count
-        } else {
-            return posts.count
-        }
-    }
-    
     func refresh() {
         DispatchQueue.global(qos: .background).async {
             self.posts.removeAll()
@@ -58,13 +51,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self.isFiltered = false
                 self.tableView.reloadData()
             }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (indexPath.row == self.posts.count - 1 ) {
-            currentPage += 1
-            parseJSON(page: "\(currentPage)")
         }
     }
     
@@ -120,79 +106,63 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         })
     }
     
+    // MARK: - UITableViewDelegate
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var post: Post!
+        let postCell: PostCellFactory!
+        
         if isFiltered {
             post = filtered[indexPath.row]
         } else {
             post = posts[indexPath.row]
         }
+        
         switch (post.postType) {
-        case "w4":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                if let mediaId = post.postMediaId {
-                    if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
-                        cell.configureCell(post: post, img: img)
-                        return cell
-                    } else {
-                        cell.configureCell(post: post)
-                        return cell
-                    }
-                } else {
-                    cell.configureCell(post: post)
-                    return cell
-                }
-            } else {
-                return PostCell()
-            }
-            
         case "w":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw") as? PostCellw {
-                if let mediaId = post.postMediaId {
-                    if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
-                        cell.configureCell(post: post, img: img)
-                        return cell
-                    } else {
-                        cell.configureCell(post: post)
-                        return cell
-                    }
-                } else {
-                    cell.configureCell(post: post)
-                    return cell
-                }
-            } else {
-                return PostCellw()
-            }
+            postCell = PostCellHelper.factory(for: .w)
         case "w2":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw2") as? PostCellw2 {
-                if let mediaId = post.postMediaId {
-                    if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
-                        cell.configureCell(post: post, img: img)
-                        return cell
-                    } else {
-                        cell.configureCell(post: post)
-                        return cell
-                    }
-                } else {
-                    cell.configureCell(post: post)
-                    return cell
-                }
-            } else {
-                return PostCellw2()
-            }
+            postCell = PostCellHelper.factory(for: .w2)
         default:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                cell.configureCell(post: post)
-                return cell
-            } else {
-                return PostCell()
-            }
+            postCell = PostCellHelper.factory(for: .w4)
         }
         
+        let cel = postCell()
+        if let cell = tableView.dequeueReusableCell(withIdentifier: cel.name()) as? PostCellProtocol {
+            if let mediaId = post.postMediaId {
+                if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
+                    cell.configureCell(post: post, img: img, imgURL: nil)
+                    return cell as! UITableViewCell
+                } else {
+                    cell.configureCell(post: post, img: nil, imgURL: nil)
+                    return cell as! UITableViewCell
+                }
+            } else {
+                cell.configureCell(post: post, img: nil, imgURL: nil)
+                return cell as! UITableViewCell
+            }
+        } else {
+            return UITableViewCell()
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (indexPath.row == self.posts.count - 1 ) {
+            currentPage += 1
+            parseJSON(page: "\(currentPage)")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltered {
+            return filtered.count
+        } else {
+            return posts.count
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -205,6 +175,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         performSegue(withIdentifier: "PostVC", sender: post)
     }
+    
+    // MARK: - FiltersByCategory
     
     @IBAction func filterLearn(_ sender: Any) {
         isFiltered = true
@@ -233,3 +205,4 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
+

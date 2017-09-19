@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class PostCell: UITableViewCell {
+class PostCell: UITableViewCell, PostCellProtocol {
     @IBOutlet weak var postImg: UIImageView!
     @IBOutlet weak var categoriesLbl: UILabel!
     @IBOutlet weak var postHeader: UILabel!
@@ -24,9 +24,17 @@ class PostCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func configureCell (post: Post, img: UIImage? = nil) {
-        self.postHeader.text = post.postTitle
-        self.categoriesLbl.text = post.postCategory
+    static func make() -> PostCellProtocol {
+        return PostCell()
+    }
+    
+    func name() -> String {
+        return "PostCell"
+    }
+    
+    func configureCell (post: Post, img: UIImage? = nil, imgURL: String? = nil) {
+        postHeader.text = post.postTitle
+        categoriesLbl.text = post.postCategory
         if img != nil {
             postImg.image = img
         } else if let mediaId = post.postMediaId {

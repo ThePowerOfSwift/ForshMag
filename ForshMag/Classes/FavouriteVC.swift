@@ -131,7 +131,6 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             let po = try context.fetch(fetchRequest)            
             for i in po {
                 ids.append(Int(i.id))
-                print(Int(i.id))
                 //context.delete(i)
             }
         } catch {

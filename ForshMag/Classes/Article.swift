@@ -25,7 +25,6 @@ class Article {
     }
     
     func parseDate (date: String) -> String{
-        print(date)
         var dateArg = date.components(separatedBy: "T")
         dateArg = dateArg[0].components(separatedBy: "-")
         return "\(dateArg[2]).\(dateArg[1]).\(dateArg[0])"
@@ -80,7 +79,6 @@ class Article {
                     let text: String = try! element.text()
                     getText(text: text, style: element.tagName())
                 case "img":
-                    print(try! element.toString())
                     let attr: String = try! element.attr("src")
                     if attr != "" {
                         getImage(url: attr, first: nil)
@@ -95,7 +93,6 @@ class Article {
     
     func getContentHTML (article: XMLElement) -> UIScrollView{
         for element in article.css("h1, h2, p, img, li") {
-            //print (element.tagName!)
             if let tag = element.tagName {
                 switch tag {
                 case "h1":
@@ -111,7 +108,6 @@ class Article {
                     if let className = element.className {
                         if className == "main-image" {
                             if let urlStr = element["src"] {
-                                print(className)
                                 getImage(url: urlStr, first: true)
                             }
                         } else if let urlStr = element["src"] {

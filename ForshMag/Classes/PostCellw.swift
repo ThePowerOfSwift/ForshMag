@@ -9,22 +9,30 @@
 import UIKit
 import Alamofire
 
-class PostCellw: UITableViewCell {
-
+class PostCellw: UITableViewCell, PostCellProtocol {
+    
     @IBOutlet weak var postImg: UIImageView!
     @IBOutlet weak var postHeader: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
-    func configureCell (post: Post, img: UIImage? = nil) {
+    static func make() -> PostCellProtocol {
+        return PostCellw()
+    }
+    
+    func name() -> String {
+        return "PostCellw"
+    }
+    
+    func configureCell (post: Post, img: UIImage? = nil, imgURL: String? = nil) {
         self.postHeader.text = post.postTitle
         if img != nil {
             postImg.image = img
@@ -59,5 +67,6 @@ class PostCellw: UITableViewCell {
         }
         
     }
-
+    
 }
+
