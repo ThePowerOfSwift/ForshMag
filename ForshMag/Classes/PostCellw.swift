@@ -38,7 +38,7 @@ class PostCellw: UITableViewCell, PostCellProtocol {
             postImg.image = img
             print ("cache")
         } else {
-            postImg.image = post.postPreview
+            //postImg.image = post.postPreview
         }
     }
 }

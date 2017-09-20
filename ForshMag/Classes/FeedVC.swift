@@ -90,7 +90,13 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     cell.configureCell(post: post, img: img, imgURL: nil)
                     return cell as! UITableViewCell
                 } else {
-                    cell.configureCell(post: post, img: nil, imgURL: nil)
+                    var image: UIImage?
+                    DispatchQueue.global(qos: .background).async {
+                        image = self.api.imageLoared(mediaId: mediaId, imgURL: post.postPreview!)
+                        DispatchQueue.main.async {
+                            cell.configureCell(post: post, img: image, imgURL: nil)
+                        }
+                    }
                     return cell as! UITableViewCell
                 }
             } else {

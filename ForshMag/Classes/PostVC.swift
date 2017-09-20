@@ -95,7 +95,7 @@ class PostVC: UIViewController {
     }
 
     func parse () {
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.postURL)", method: .get).responseJSON { response in
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.postURL!)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
                 self.mainView.addSubview(self.articleView.getContentJSON(article: json))
                 self.title = self.post.postCategory

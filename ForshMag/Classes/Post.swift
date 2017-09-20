@@ -9,51 +9,37 @@
 import Foundation
 import UIKit
 
-class Post {
-    private var _postTitle: String!
-    private var _postURL: Int!
-    private var _postMediaId: Int?
-    private var _postPreview: UIImage?
-    private var _postCategory: String!
-    private var _postType: String!
-    private let _categories = ["#БЕЗ РУБРИКИ", "#УЧИТЬСЯ", "#ДЕЛАТЬ", "#ОТДЫХАТЬ"]
-    
-    var postTitle: String {
-        return _postTitle
-    }
-    
-    var postURL: Int {
-        return _postURL
-    }
-    
-    var postMediaId: Int? {
-        return _postMediaId
-    }
-    
-    var postType: String {
-        return _postType
-    }
-    
-    var postCategory: String {
-        return _postCategory
-    }
-    
-    var postPreview: UIImage? {
-        return _postPreview
-    }
-    
-    init(title: String, category: Int, url: Int, type: String, mediaId: Int?, postPreview: UIImage? = nil) {
-        self._postTitle = title
-        self._postURL = url
-        if (mediaId != nil) {
-            self._postMediaId = mediaId
-        }
-        if postPreview != nil {
-            self._postPreview = postPreview
-        }
-        self._postType = type
-        
-        self._postCategory = _categories[category - 1]
+enum Category: String {
+    case learn = "#УЧИТЬСЯ"
+    case to_do = "#ДЕЛАТЬ"
+    case rest = "#ОТДЫХАТЬ"
+    case none = "#БЕЗ РУБРИКИ"
+}
 
+class Post {
+    private(set) var postTitle: String!
+    private(set) var postURL: Int!
+    private(set) var postMediaId: Int?
+    private(set) var postPreview: URL?
+    private(set) var postCategory: String!
+    private(set) var postType: String!
+    private let categories = ["#БЕЗ РУБРИКИ", "#УЧИТЬСЯ", "#ДЕЛАТЬ", "#ОТДЫХАТЬ"]
+    
+    init(title: String, category: Int, url: Int, type: String, mediaId: Int?, postPreview: URL?) {
+        self.postTitle = title
+        self.postURL = url
+        self.postMediaId = mediaId
+        self.postPreview = postPreview
+        self.postType = type
+        switch category {
+        case 1:
+            postCategory = Category.learn.rawValue
+        case 2:
+            postCategory = Category.to_do.rawValue
+        case 3:
+            postCategory = Category.rest.rawValue
+        default:
+            postCategory = Category.none.rawValue
+        }
     }
 }

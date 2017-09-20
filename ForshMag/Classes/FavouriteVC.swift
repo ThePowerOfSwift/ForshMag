@@ -116,7 +116,7 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     if let categories = post["categories"] as? Array<Int> {
                         postTemp["categories"] = categories[0]
                     }
-                    let post = Post(title: postTemp["title"]! as! String, category: postTemp["categories"] as! Int, url: postTemp["id"] as! Int, type: postTemp["type"]! as! String, mediaId: postTemp["mediaId"] as? Int)
+                    let post = Post(title: postTemp["title"]! as! String, category: postTemp["categories"] as! Int, url: postTemp["id"] as! Int, type: postTemp["type"]! as! String, mediaId: postTemp["mediaId"] as? Int, postPreview: nil)
                     self.posts.append(post)
                 }              
             }
