@@ -62,24 +62,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    //RES FUNC
-    func loadImage (type: String, mediaId: Int, completion: @escaping (String) -> ()) {
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON(completionHandler: { (response) in
-            if let json = response.result.value as? Dictionary<String, Any> {
-                if let media = json ["media_details"] as? Dictionary<String, Any> {
-                    if let sizes = media["sizes"] as? Dictionary<String, Any> {
-                        if let type = sizes[type] as? Dictionary<String,Any>{
-                            if let imgUrl = type["source_url"] as? String {
-                                completion(imgUrl)
-                            }
-                        }
-                    }
-                }
-            }
-            
-        })
-    }
-    
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
