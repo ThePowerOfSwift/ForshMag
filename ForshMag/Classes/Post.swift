@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 
 enum Category: String {
-    case learn = "#УЧИТЬСЯ"
-    case to_do = "#ДЕЛАТЬ"
-    case rest = "#ОТДЫХАТЬ"
     case none = "#БЕЗ РУБРИКИ"
+    case learn = "#УЧИТЬСЯ"
+    case rest = "#ОТДЫХАТЬ"
+    case to_do = "#ДЕЛАТЬ"
 }
 
 class Post {
@@ -23,7 +23,6 @@ class Post {
     private(set) var postPreview: URL?
     private(set) var postCategory: String!
     private(set) var postType: String!
-    private let categories = ["#БЕЗ РУБРИКИ", "#УЧИТЬСЯ", "#ДЕЛАТЬ", "#ОТДЫХАТЬ"]
     
     init(title: String, category: Int, url: Int, type: String, mediaId: Int?, postPreview: URL?) {
         self.postTitle = title
@@ -32,11 +31,11 @@ class Post {
         self.postPreview = postPreview
         self.postType = type
         switch category {
-        case 1:
-            postCategory = Category.learn.rawValue
         case 2:
-            postCategory = Category.to_do.rawValue
+            postCategory = Category.learn.rawValue
         case 3:
+            postCategory = Category.to_do.rawValue
+        case 4:
             postCategory = Category.rest.rawValue
         default:
             postCategory = Category.none.rawValue

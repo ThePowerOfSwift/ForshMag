@@ -38,7 +38,7 @@ class PostCell: UITableViewCell, PostCellProtocol {
         if img != nil {
             postImg.image = img
         } else {
-            //postImg.image = post.postPreview
+            postImg.image = UIImage(named: "empty.png")
         }
     }
 }

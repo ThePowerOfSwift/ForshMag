@@ -89,14 +89,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
                     cell.configureCell(post: post, img: img, imgURL: nil)
                     return cell as! UITableViewCell
-                } else {
+                } else if let imgURL = post.postPreview {
                     var image: UIImage?
                     DispatchQueue.global(qos: .background).async {
-                        image = self.api.imageLoared(mediaId: mediaId, imgURL: post.postPreview!)
+                        image = self.api.imageLoared(mediaId: mediaId, imgURL: imgURL)
                         DispatchQueue.main.async {
                             cell.configureCell(post: post, img: image, imgURL: nil)
                         }
                     }
+                    return cell as! UITableViewCell
+                } else {
+                    cell.configureCell(post: post, img: nil, imgURL: nil)
                     return cell as! UITableViewCell
                 }
             } else {
