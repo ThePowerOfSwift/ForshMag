@@ -65,8 +65,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var post: Post!
-        let postCell: PostCellFactory!
+        var post: Post
+        let postCell: PostCellFactory
         
         if isFiltered {
             post = filtered[indexPath.row]
@@ -83,31 +83,23 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             postCell = PostCellHelper.factory(for: .w4)
         }
         
-        let cel = postCell()
-        if let cell = tableView.dequeueReusableCell(withIdentifier: cel.name()) as? PostCellProtocol {
-            if let mediaId = post.mediaId {
-                if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
-                    print ("cached")
-                    cell.configureCell(post: post, img: img, imgURL: nil)
-                    return cell as! UITableViewCell
-                } else if let imgURL = post.previewImgUrl {
-                    var image: UIImage?
-                    DispatchQueue.global(qos: .background).async {
-                        image = self.api.imageLoared(mediaId: mediaId, imgURL: imgURL)
-                        print ("loaded")
-                        DispatchQueue.main.async {
-                            cell.configureCell(post: post, img: image, imgURL: nil)
-                        }
-                    }
-                    return cell as! UITableViewCell
-                } else {
-                    cell.configureCell(post: post, img: nil, imgURL: nil)
-                    return cell as! UITableViewCell
-                }
-            } else {
-                cell.configureCell(post: post, img: nil, imgURL: nil)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: postCell().name()) as? PostCellProtocol {
+            guard let mediaId = post.mediaId, let imgURL = post.previewImgUrl else {
+                cell.configureCell(post: post, img: nil)
                 return cell as! UITableViewCell
             }
+            if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
+                cell.configureCell(post: post, img: img)
+            } else {
+                var image: UIImage?
+                DispatchQueue.global(qos: .background).async {
+                    image = self.api.imageLoared(mediaId: mediaId, imgURL: imgURL)
+                    DispatchQueue.main.async {
+                        cell.configureCell(post: post, img: image)
+                    }
+                }
+            }
+            return cell as!  UITableViewCell
         } else {
             return UITableViewCell()
         }

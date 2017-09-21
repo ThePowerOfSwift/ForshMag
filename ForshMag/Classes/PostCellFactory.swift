@@ -12,7 +12,7 @@ import UIKit
 protocol PostCellProtocol {
     static func make() -> PostCellProtocol
     func name() -> String
-    func configureCell(post: Post, img: UIImage?, imgURL: String?)
+    func configureCell(post: Post, img: UIImage?)
 }
 
 typealias PostCellFactory = () -> PostCellProtocol

@@ -32,7 +32,7 @@ class PostCell: UITableViewCell, PostCellProtocol {
         return "PostCell"
     }
     
-    func configureCell (post: Post, img: UIImage? = nil, imgURL: String? = nil) {
+    func configureCell (post: Post, img: UIImage? = nil) {
         postHeader.text = post.title
         categoriesLbl.text = post.category
         if img != nil {
