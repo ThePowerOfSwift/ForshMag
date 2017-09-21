@@ -52,7 +52,8 @@ class ForshMagAPI {
                 guard let json = response.result.value as? Dictionary<String, Any> else { return }
                 guard let media = json ["media_details"] as? Dictionary<String, Any> else { return }
                 guard let sizes = media["sizes"] as? Dictionary<String, Any> else { return }
-                guard let type = sizes["\(post["type"]!)"] as? Dictionary<String,Any> else { return }
+                guard let type = sizes["medium_large"] as? Dictionary<String,Any> else { return }
+//                guard let type = sizes["\(post["type"]!)"] as? Dictionary<String,Any> else { return }
                 guard let imgUrl = type["source_url"] as? String else { return }
                 let url = URL(string: imgUrl)
                 urls.append((url!, post["mediaId"] as! Int))

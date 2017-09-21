@@ -667,7 +667,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="138"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xRS-Lu-beC">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xRS-Lu-beC">
                                                     <rect key="frame" x="37.5" y="4" width="130" height="130"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="130" id="DBn-PX-WRx"/>
@@ -710,7 +710,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fVh-yk-2Ql">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fVh-yk-2Ql">
                                                     <rect key="frame" x="0.0" y="4" width="375" height="192"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="192" id="Dxj-aZ-KBZ"/>
@@ -763,7 +763,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="308"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7zx-ty-hKP">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7zx-ty-hKP">
                                                     <rect key="frame" x="37.5" y="4" width="300" height="300"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="300" id="2jE-4D-CPV"/>
@@ -902,7 +902,6 @@
         <!--Лента-->
         <scene sceneID="gPO-JW-U1z">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="AG1-iA-o4b" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yHZ-WZ-x0W" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Лента" image="Feed" selectedImage="Feed-selected" id="24m-UK-y1x"/>
                     <toolbarItems/>
@@ -922,6 +921,7 @@
                         <segue destination="Ufx-YA-C67" kind="relationship" relationship="rootViewController" id="acd-6W-ZFa"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AG1-iA-o4b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2375.1999999999998" y="1770.7646176911546"/>
         </scene>
@@ -967,6 +967,6 @@
         <image name="vk" width="29" height="29"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kaA-u0-Mpg"/>
+        <segue reference="uu3-y7-41d"/>
     </inferredMetricsTieBreakers>
 </document>

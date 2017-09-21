@@ -23,6 +23,7 @@ class PostVC: UIViewController {
         super.viewDidLoad()
         isInFavourite()
         articleView = Article (bounds: mainView.bounds)
+        self.title = post.category
         parse ()
     }
     
@@ -98,7 +99,6 @@ class PostVC: UIViewController {
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.urlId)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
                 self.mainView.addSubview(self.articleView.getContentJSON(article: json))
-                self.title = self.post.category
             }
         }
     }

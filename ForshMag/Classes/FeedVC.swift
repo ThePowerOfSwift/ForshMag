@@ -150,6 +150,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.reloadData()
     }
     
+    // MARK: -
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PostVC" {
             if let detailVC = segue.destination as? PostVC {
