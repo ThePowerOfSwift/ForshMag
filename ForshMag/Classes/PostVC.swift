@@ -36,7 +36,7 @@ class PostVC: UIViewController {
             self.navigationItem.setRightBarButtonItems([(self.navigationItem.rightBarButtonItems?.first)!, faveBtn], animated: true)            
         } else {
             let fav = Favourite(context: context)
-            fav.id = Int16(post.postURL)
+            fav.id = Int16(post.urlId)
             fav.isFavourite = true
             ad.saveContext()
             print("Fav")
@@ -55,7 +55,7 @@ class PostVC: UIViewController {
         do {
             let po = try context.fetch(fetchRequest)
             for i in po {
-                if post.postURL == Int(i.id) {
+                if post.urlId == Int(i.id) {
                     currentPost = i
                     isFavourite = true
                     print ("yes")
@@ -95,10 +95,10 @@ class PostVC: UIViewController {
     }
 
     func parse () {
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.postURL!)", method: .get).responseJSON { response in
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.urlId)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
                 self.mainView.addSubview(self.articleView.getContentJSON(article: json))
-                self.title = self.post.postCategory
+                self.title = self.post.category
             }
         }
     }

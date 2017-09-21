@@ -74,7 +74,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             post = posts[indexPath.row]
         }
         
-        switch (post.postType) {
+        switch (post.type) {
         case "w":
             postCell = PostCellHelper.factory(for: .w)
         case "w2":
@@ -85,14 +85,16 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         let cel = postCell()
         if let cell = tableView.dequeueReusableCell(withIdentifier: cel.name()) as? PostCellProtocol {
-            if let mediaId = post.postMediaId {
+            if let mediaId = post.mediaId {
                 if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
+                    print ("cached")
                     cell.configureCell(post: post, img: img, imgURL: nil)
                     return cell as! UITableViewCell
-                } else if let imgURL = post.postPreview {
+                } else if let imgURL = post.previewImgUrl {
                     var image: UIImage?
                     DispatchQueue.global(qos: .background).async {
                         image = self.api.imageLoared(mediaId: mediaId, imgURL: imgURL)
+                        print ("loaded")
                         DispatchQueue.main.async {
                             cell.configureCell(post: post, img: image, imgURL: nil)
                         }
@@ -141,18 +143,18 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBAction func filterLearn(_ sender: Any) {
         isFiltered = true
-        filtered = posts.filter({$0.postCategory == "#УЧИТЬСЯ"})
+        filtered = posts.filter({$0.category == "#УЧИТЬСЯ"})
         tableView.reloadData()
     }
     
     @IBAction func filterDo(_ sender: Any) {
         isFiltered = true
-        filtered = posts.filter({$0.postCategory == "#ДЕЛАТЬ"})
+        filtered = posts.filter({$0.category == "#ДЕЛАТЬ"})
         tableView.reloadData()
     }
     @IBAction func filterRest(_ sender: Any) {
         isFiltered = true
-        filtered = posts.filter({$0.postCategory == "#ОТДЫХАТЬ"})
+        filtered = posts.filter({$0.category == "#ОТДЫХАТЬ"})
         tableView.reloadData()
     }
     

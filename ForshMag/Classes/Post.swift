@@ -17,28 +17,28 @@ enum Category: String {
 }
 
 class Post {
-    private(set) var postTitle: String!
-    private(set) var postURL: Int!
-    private(set) var postMediaId: Int?
-    private(set) var postPreview: URL?
-    private(set) var postCategory: String!
-    private(set) var postType: String!
+    private(set) var title: String
+    private(set) var urlId: Int
+    private(set) var category: String
+    private(set) var type: String
+    private(set) var mediaId: Int?
+    private(set) var previewImgUrl: URL?
     
     init(title: String, category: Int, url: Int, type: String, mediaId: Int?, postPreview: URL?) {
-        self.postTitle = title
-        self.postURL = url
-        self.postMediaId = mediaId
-        self.postPreview = postPreview
-        self.postType = type
+        self.title = title
+        self.urlId = url
+        self.mediaId = mediaId
+        self.previewImgUrl = postPreview
+        self.type = type
         switch category {
         case 2:
-            postCategory = Category.learn.rawValue
+            self.category = Category.learn.rawValue
         case 3:
-            postCategory = Category.to_do.rawValue
+            self.category = Category.to_do.rawValue
         case 4:
-            postCategory = Category.rest.rawValue
+            self.category = Category.rest.rawValue
         default:
-            postCategory = Category.none.rawValue
+            self.category = Category.none.rawValue
         }
     }
 }

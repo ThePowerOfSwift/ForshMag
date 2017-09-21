@@ -29,10 +29,10 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var post: Post!
         post = posts[indexPath.row]
-        switch (post.postType) {
+        switch (post.type) {
         case "w4":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                if let mediaId = post.postMediaId {
+                if let mediaId = post.mediaId {
                     if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
                         cell.configureCell(post: post, img: img)
                         return cell
@@ -49,7 +49,7 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         case "w":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw") as? PostCellw {
-                if let mediaId = post.postMediaId {
+                if let mediaId = post.mediaId {
                     if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
                         cell.configureCell(post: post, img: img)
                         return cell
@@ -66,7 +66,7 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         case "w2":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw2") as? PostCellw2 {
-                if let mediaId = post.postMediaId {
+                if let mediaId = post.mediaId {
                     if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
                         cell.configureCell(post: post, img: img)
                         return cell

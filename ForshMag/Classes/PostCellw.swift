@@ -33,10 +33,9 @@ class PostCellw: UITableViewCell, PostCellProtocol {
     }
     
     func configureCell (post: Post, img: UIImage? = nil, imgURL: String? = nil) {
-        self.postHeader.text = post.postTitle
+        self.postHeader.text = post.title
         if img != nil {
             postImg.image = img
-            print ("cache")
         } else {
             postImg.image = UIImage(named: "empty.png")
         }
