@@ -11,20 +11,14 @@ import Alamofire
 
 class ForshMagAPI {
     
-    func getPost(withId id: Int, completion: @escaping (Dictionary<String, Any>) -> ()) {
-        apiPost(withId: id, completion: completion)
-    }
+    static var sharedInstance: ForshMagAPI = ForshMagAPI()
     
-    func apiPost(withId id: Int, completion: @escaping (Dictionary<String, Any>) -> ()) {
+    func getPost(withId id: Int, completion: @escaping (Dictionary<String, Any>) -> ()) {
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(id)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
                 completion(json)
             }
         }
-    }
-    
-    func getFeed(forPage page: String, completionHandler: @escaping ([Post]) -> ()) {
-        apiFeed(forPage: page, completion: completionHandler)
     }
     
     func imageLoader(mediaId: Int, completion: @escaping (UIImage) -> ()) {
@@ -35,8 +29,8 @@ class ForshMagAPI {
             completion (image)
         }
     }
-//
-    func apiPreviewImages (mediaId: Int, completionHandler: @escaping (URL?) -> ()) {
+
+    func apiPreviewImages (mediaId: Int, completion: @escaping (URL?) -> ()) {
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON { response in
             guard let json = response.result.value as? Dictionary<String, Any> else { return }
             guard let media = json ["media_details"] as? Dictionary<String, Any> else { return }
@@ -44,11 +38,11 @@ class ForshMagAPI {
             guard let type = sizes["medium_large"] as? Dictionary<String,Any> else { return }
             //                guard let type = sizes["\(post["type"]!)"] as? Dictionary<String,Any> else { return }
             guard let imgUrl = type["source_url"] as? String else { return }
-            completionHandler(URL(string: imgUrl))
+            completion(URL(string: imgUrl))
         }
     }
     
-    func apiFeed (forPage page: String, completion: @escaping  ([Post]) -> ()) {
+    func getFeed(forPage page: String, completion: @escaping  ([Post]) -> ()) {
         var posts: [Post] = []
         let parameters = ["per_page": 10, "page": page] as [String : Any]
         
