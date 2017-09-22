@@ -23,10 +23,14 @@ class ForshMagAPI {
     
     func imageLoader(mediaId: Int, completion: @escaping (UIImage) -> ()) {
         apiPreviewImages(mediaId: mediaId) { imgURL in
-            guard let data = try? Data(contentsOf: imgURL!) else {return}
-            guard let image = UIImage(data: data) else {return}
-            FeedVC.imageCache.setObject(image, forKey: "\(mediaId)" as NSString)
-            completion (image)
+            DispatchQueue.global().async {
+                guard let data = try? Data(contentsOf: imgURL!) else {return}
+                guard let image = UIImage(data: data) else {return}
+                DispatchQueue.main.async {
+                    FeedVC.imageCache.setObject(image, forKey: "\(mediaId)" as NSString)
+                    completion (image)
+                }
+            }
         }
     }
 
