@@ -11,61 +11,45 @@ import Alamofire
 
 class ForshMagAPI {
     
-    func getFeed (forPage page: String, completionHandler: @escaping ([Post]) -> ()) {
+    func getPost(withId id: Int, completion: @escaping (Dictionary<String, Any>) -> ()) {
+        apiPost(withId: id, completion: completion)
+    }
+    
+    func apiPost(withId id: Int, completion: @escaping (Dictionary<String, Any>) -> ()) {
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(id)", method: .get).responseJSON { response in
+            if let json = response.result.value! as? Dictionary<String, Any> {
+                completion(json)
+            }
+        }
+    }
+    
+    func getFeed(forPage page: String, completionHandler: @escaping ([Post]) -> ()) {
+        apiFeed(forPage: page, completion: completionHandler)
+    }
+    
+    func imageLoader(mediaId: Int, completion: @escaping (UIImage) -> ()) {
+        apiPreviewImages(mediaId: mediaId) { imgURL in
+            guard let data = try? Data(contentsOf: imgURL!) else {return}
+            guard let image = UIImage(data: data) else {return}
+            FeedVC.imageCache.setObject(image, forKey: "\(mediaId)" as NSString)
+            completion (image)
+        }
+    }
+//
+    func apiPreviewImages (mediaId: Int, completionHandler: @escaping (URL?) -> ()) {
+        Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON { response in
+            guard let json = response.result.value as? Dictionary<String, Any> else { return }
+            guard let media = json ["media_details"] as? Dictionary<String, Any> else { return }
+            guard let sizes = media["sizes"] as? Dictionary<String, Any> else { return }
+            guard let type = sizes["medium_large"] as? Dictionary<String,Any> else { return }
+            //                guard let type = sizes["\(post["type"]!)"] as? Dictionary<String,Any> else { return }
+            guard let imgUrl = type["source_url"] as? String else { return }
+            completionHandler(URL(string: imgUrl))
+        }
+    }
+    
+    func apiFeed (forPage page: String, completion: @escaping  ([Post]) -> ()) {
         var posts: [Post] = []
-        apiFeed(forPage: page) { postsDict in
-            self.getPreviewImages(forPosts: postsDict) { images in
-                for i in 0..<postsDict.count {
-                    let indexOfImage = images.index(where: {
-                        $0.1 == postsDict[i]["mediaId"] as! Int
-                    })
-                    let imageURL = indexOfImage != nil ? images[indexOfImage!].0 : nil
-                    let post = Post(title: postsDict[i]["title"]! as! String,
-                                    category: postsDict[i]["categories"] as! Int,
-                                    url: postsDict[i]["id"] as! Int,
-                                    type: postsDict[i]["type"]! as! String,
-                                    mediaId: postsDict[i]["mediaId"] as? Int,
-                                    postPreview: imageURL)
-                    posts.append(post)
-                }
-                completionHandler(posts)
-            }
-        }
-    }
-    
-    func getPreviewImages(forPosts posts: [Dictionary<String, Any>], completion: @escaping ([(URL, Int)]) -> ()) {
-        apiPreviewImages(posts: posts, completionHandler: completion)
-    }
-    
-    func imageLoared (mediaId: Int, imgURL: URL) -> UIImage {
-        guard let data = try? Data(contentsOf: imgURL) else {return UIImage(named: "empty.png")!}
-        guard let image = UIImage(data: data) else {return UIImage(named: "empty.png")!}
-        FeedVC.imageCache.setObject(image, forKey: "\(mediaId)" as NSString)
-        return image
-    }
-    
-    func apiPreviewImages (posts: [Dictionary<String, Any>], completionHandler: @escaping ([(URL, Int)]) -> ()) {
-        var urls: [(URL, Int)] = []
-        for (index, post) in posts.enumerated() {
-            guard let mediaId = post["mediaId"] else {continue}
-            Alamofire.request("http://forshmag.me/wp-json/wp/v2/media/\(mediaId)", method: .get).responseJSON { response in
-                guard let json = response.result.value as? Dictionary<String, Any> else { return }
-                guard let media = json ["media_details"] as? Dictionary<String, Any> else { return }
-                guard let sizes = media["sizes"] as? Dictionary<String, Any> else { return }
-                guard let type = sizes["medium_large"] as? Dictionary<String,Any> else { return }
-//                guard let type = sizes["\(post["type"]!)"] as? Dictionary<String,Any> else { return }
-                guard let imgUrl = type["source_url"] as? String else { return }
-                let url = URL(string: imgUrl)
-                urls.append((url!, post["mediaId"] as! Int))
-                if index == posts.count - 1 {
-                    completionHandler(urls)
-                }
-            }
-        }
-    }
-    
-    func apiFeed (forPage page: String, completion: @escaping  ([Dictionary<String, Any>]) -> ()) {
-        var posts: [Dictionary<String, Any>] = []
         let parameters = ["per_page": 10, "page": page] as [String : Any]
         
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/", method: .get, parameters: parameters).responseJSON { response in
@@ -91,7 +75,12 @@ class ForshMagAPI {
                     if let categories = post["categories"] as? Array<Int> {
                         postTemp["categories"] = categories[0]
                     }
-                    posts.append(postTemp)
+                    let post = Post(title: postTemp["title"]! as! String,
+                                    category: postTemp["categories"] as! Int,
+                                    url: postTemp["id"] as! Int,
+                                    type: postTemp["type"]! as! String,
+                                    mediaId: postTemp["mediaId"] as! Int)
+                    posts.append(post)
                 }
             }
             completion(posts)

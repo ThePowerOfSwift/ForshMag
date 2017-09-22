@@ -32,8 +32,8 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         switch (post.type) {
         case "w4":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                if let mediaId = post.mediaId {
-                    if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
+                if post.mediaId != 0 {
+                    if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
                         cell.configureCell(post: post, img: img)
                         return cell
                     } else {
@@ -49,8 +49,8 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         case "w":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw") as? PostCellw {
-                if let mediaId = post.mediaId {
-                    if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
+                if post.mediaId != 0 {
+                    if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
                         cell.configureCell(post: post, img: img)
                         return cell
                     } else {
@@ -66,8 +66,8 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         case "w2":
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw2") as? PostCellw2 {
-                if let mediaId = post.mediaId {
-                    if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
+                if post.mediaId != 0 {
+                    if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
                         cell.configureCell(post: post, img: img)
                         return cell
                     } else {
@@ -116,7 +116,7 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     if let categories = post["categories"] as? Array<Int> {
                         postTemp["categories"] = categories[0]
                     }
-                    let post = Post(title: postTemp["title"]! as! String, category: postTemp["categories"] as! Int, url: postTemp["id"] as! Int, type: postTemp["type"]! as! String, mediaId: postTemp["mediaId"] as? Int, postPreview: nil)
+                    let post = Post(title: postTemp["title"]! as! String, category: postTemp["categories"] as! Int, url: postTemp["id"] as! Int, type: postTemp["type"]! as! String, mediaId: postTemp["mediaId"] as! Int)
                     self.posts.append(post)
                 }              
             }

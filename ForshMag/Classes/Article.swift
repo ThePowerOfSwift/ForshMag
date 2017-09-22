@@ -185,7 +185,7 @@ class Article {
     }
     
     func getHeader() {
-        let textView = UITextView(frame: CGRect(x: 0, y: 10, width: articleView.layer.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
+        let textView = UITextView(frame: CGRect(x: 0, y: 10, width: articleView.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
         textView.attributedText = typography(style: "h1", text: header["text"]!)
         textView.sizeToFit()
         textView.backgroundColor = UIColor.clear
@@ -199,7 +199,7 @@ class Article {
     }
     
     func getMeta (){
-        let textView = UITextView(frame: CGRect(x: 0, y: height, width: articleView.layer.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
+        let textView = UITextView(frame: CGRect(x: 0, y: height, width: articleView.frame.size.width-30, height: CGFloat.greatestFiniteMagnitude))
         let str = header["author"]!+" · "+header["date"]!
         textView.attributedText = typography(style: "meta", text: str.localizedUppercase)
         textView.sizeToFit()

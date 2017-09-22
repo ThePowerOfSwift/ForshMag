@@ -19,12 +19,26 @@ class PostVC: UIViewController {
     var isFavourite: Bool = false
     var currentPost : Favourite?
     
+    let api = ForshMagAPI()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         isInFavourite()
         articleView = Article (bounds: mainView.bounds)
         self.title = post.category
-        parse ()
+        var view = UIView()
+        DispatchQueue.global(qos: .background).async {
+            self.api.getPost(withId: self.post.urlId, completion: { post in
+                view = self.articleView.getContentJSON(article: post)
+                DispatchQueue.main.async {
+                    self.mainView.addSubview(view)
+                }
+            })
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
     }
     
     func addToFavourite () {
@@ -79,27 +93,9 @@ class PostVC: UIViewController {
         self.navigationItem.rightBarButtonItems = rightBars
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        dismiss(animated: true, completion: nil)
-        return true
-    }
-    
     func share () {
         print("shared")
         let activityVC = UIActivityViewController(activityItems: ["SHARE", "dsa"], applicationActivities: nil)
         present(activityVC, animated: true, completion: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        //articleView = Article (bounds: mainView.bounds)
-        //parse ()
-    }
-
-    func parse () {
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(post.urlId)", method: .get).responseJSON { response in
-            if let json = response.result.value! as? Dictionary<String, Any> {
-                self.mainView.addSubview(self.articleView.getContentJSON(article: json))
-            }
-        }
     }
 }

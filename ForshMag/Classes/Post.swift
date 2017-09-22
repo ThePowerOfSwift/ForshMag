@@ -21,14 +21,12 @@ class Post {
     private(set) var urlId: Int
     private(set) var category: String
     private(set) var type: String
-    private(set) var mediaId: Int?
-    private(set) var previewImgUrl: URL?
+    private(set) var mediaId: Int
     
-    init(title: String, category: Int, url: Int, type: String, mediaId: Int?, postPreview: URL?) {
+    init(title: String, category: Int, url: Int, type: String, mediaId: Int) {
         self.title = title
         self.urlId = url
         self.mediaId = mediaId
-        self.previewImgUrl = postPreview
         self.type = type
         switch category {
         case 2:

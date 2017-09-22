@@ -33,12 +33,12 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Идет обновление...")
-        refreshControl.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         tableView.addSubview(refreshControl)
         tableView.tableFooterView?.isHidden = true
         
-        parseJSON(page: "\(currentPage)")
+        refresh()
     }
     
     func refresh() {
@@ -84,29 +84,26 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: postCell().name()) as? PostCellProtocol {
-            guard let mediaId = post.mediaId, let imgURL = post.previewImgUrl else {
-                cell.configureCell(post: post, img: nil)
-                return cell as! UITableViewCell
-            }
-            if let img = FeedVC.imageCache.object(forKey: "\(mediaId)" as NSString) {
-                cell.configureCell(post: post, img: img)
-            } else {
-                var image: UIImage?
-                DispatchQueue.global(qos: .background).async {
-                    image = self.api.imageLoared(mediaId: mediaId, imgURL: imgURL)
-                    DispatchQueue.main.async {
+            if post.mediaId != 0 {
+                if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
+                    cell.configureCell(post: post, img: img)
+                } else {
+                    api.imageLoader(mediaId: post.mediaId) { image in
                         cell.configureCell(post: post, img: image)
                     }
                 }
+                return cell as! UITableViewCell
+            } else {
+                cell.configureCell(post: post, img: nil)
+                return cell as! UITableViewCell
             }
-            return cell as!  UITableViewCell
         } else {
             return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (indexPath.row == self.posts.count - 1) {
+        if (indexPath.row == self.posts.count - 2) {
             currentPage += 1
             parseJSON(page: "\(currentPage)")
         }
