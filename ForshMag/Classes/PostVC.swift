@@ -12,6 +12,7 @@ import CoreData
 
 class PostVC: UIViewController {
     @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var post: Post!
     var articleView: Article!
@@ -27,14 +28,13 @@ class PostVC: UIViewController {
         articleView = Article (bounds: mainView.bounds)
         self.title = post.category
         var view = UIView()
-        DispatchQueue.global(qos: .background).async {
-            self.api.getPost(withId: self.post.urlId, completion: { post in
-                view = self.articleView.getContentJSON(article: post)
-                DispatchQueue.main.async {
-                    self.mainView.addSubview(view)
-                }
-            })
-        }
+        ForshMagAPI.sharedInstance.getPost(withId: self.post.urlId, completion: { post in
+            view = self.articleView.getPostView(article: post)
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.mainView.addSubview(view)
+            }
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {

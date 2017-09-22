@@ -872,7 +872,18 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qqG-gx-Qx1">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="2O3-G0-ghr">
+                                        <rect key="frame" x="169" y="283" width="37" height="37"/>
+                                        <color key="tintColor" red="0.42745098040000001" green="0.66274509800000003" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="color" red="0.42745098040000001" green="0.66274509800000003" blue="0.42745098040000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </activityIndicatorView>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="2O3-G0-ghr" firstAttribute="centerX" secondItem="qqG-gx-Qx1" secondAttribute="centerX" id="ALU-tg-AOv"/>
+                                    <constraint firstItem="2O3-G0-ghr" firstAttribute="centerY" secondItem="qqG-gx-Qx1" secondAttribute="centerY" id="xr9-Gv-Bz4"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -884,6 +895,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="2O3-G0-ghr" id="0ng-mx-Mnj"/>
                         <outlet property="mainView" destination="qqG-gx-Qx1" id="5Jd-7G-DbD"/>
                     </connections>
                 </viewController>

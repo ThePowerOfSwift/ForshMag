@@ -8,15 +8,33 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 class ForshMagAPI {
     
     static var sharedInstance: ForshMagAPI = ForshMagAPI()
     
     func getPost(withId id: Int, completion: @escaping (Dictionary<String, Any>) -> ()) {
+        var postData = Dictionary<String, Any>()
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/\(id)", method: .get).responseJSON { response in
             if let json = response.result.value! as? Dictionary<String, Any> {
-                completion(json)
+                let json = JSON(json)
+                if let headerText = json["title"]["rendered"].string {
+                    postData["headerText"] = headerText
+                }
+                if let headerImg = json["acf"]["header-image"].string {
+                   postData["headerImgUrl"] = headerImg
+                }
+                if let date = json["date"].string {
+                    postData["date"] = self.parseDate(date: date)
+                }
+                if let author = json["acf"]["header-author"]["display_name"].string {
+                    postData["author"] = author
+                }
+                if let body = json["content"]["rendered"].string {
+                   postData["body"] = body
+                }
+                completion(postData)
             }
         }
     }
@@ -40,7 +58,6 @@ class ForshMagAPI {
             guard let media = json ["media_details"] as? Dictionary<String, Any> else { return }
             guard let sizes = media["sizes"] as? Dictionary<String, Any> else { return }
             guard let type = sizes["medium_large"] as? Dictionary<String,Any> else { return }
-            //                guard let type = sizes["\(post["type"]!)"] as? Dictionary<String,Any> else { return }
             guard let imgUrl = type["source_url"] as? String else { return }
             completion(URL(string: imgUrl))
         }
@@ -83,5 +100,11 @@ class ForshMagAPI {
             }
             completion(posts)
         }
+    }
+    
+    func parseDate (date: String) -> String {
+        var dateArg = date.components(separatedBy: "T")
+        dateArg = dateArg[0].components(separatedBy: "-")
+        return "\(dateArg[2]).\(dateArg[1]).\(dateArg[0])"
     }
 }
