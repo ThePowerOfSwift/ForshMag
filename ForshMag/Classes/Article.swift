@@ -36,7 +36,6 @@ class Article {
         getImage(url: article["headerImgUrl"] as! String, first: true)
         getMeta(article)
         getContent(content: article["body"] as! String)
-
         return articleView
     }
     
@@ -53,9 +52,17 @@ class Article {
                     let text: String = try! element.text()
                     getText(text: text, style: element.tagName())
                 case "img":
-                    let attr: String = try! element.attr("src")
+                    let attr: String = try! element.attr("srcset")
                     if attr != "" {
-                        getImage(url: attr)
+                        let originalWidth = try! element.attr("width")
+                        let originalHeight = try! element.attr("height")
+                        
+                        let imageWithSize = getImageWithSize(srcset: attr, originalSize: (Int(originalWidth)!, Int(originalHeight)!))
+                        if imageWithSize.0 != nil {
+                            getImage(url: imageWithSize.0!, width: imageWithSize.1!, height: imageWithSize.2!)
+                        } else {
+                            getImage(url: try! element.attr("src"))
+                        }
                     }
                 default:
                     let text: String = try! element.text()
@@ -63,6 +70,190 @@ class Article {
                 }
             }
         }
+    }
+    
+    func getImageWithSize(srcset: String, originalSize: (Int, Int)) -> (String?, Int?, Int?) {
+        var url: String?
+        var width: Int?
+        var height: Int?
+        let set = srcset.components(separatedBy: ",")
+        set.forEach {
+            var alt = $0.components(separatedBy: " ")
+            if alt[0] == "" {
+                alt.remove(at: 0)
+            }
+            if alt[1] == "768w"{
+                url = alt[0]
+                width = 768
+                height = Int(Double(originalSize.1) / (Double(originalSize.0) / 768.0))
+            }
+        }
+        return (url, width, height)
+    }
+    
+    func getExcerpt (text: String){
+        let block = UIView(frame: CGRect(x: 0, y: CGFloat(calculateHeightView()), width: articleView.bounds.width / 6, height: 5))
+        block.backgroundColor = UIColor.init(netHex: 0x6DA96D)
+        block.layer.zPosition = 1
+        block.center = CGPoint (x: articleView.frame.width / 2, y: CGFloat(calculateHeightView()))
+        articleView.addSubview(block)
+        
+        let textView = UITextView(frame: CGRect(x: 15, y: CGFloat(calculateHeightView() + block.frame.height), width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
+        textView.attributedText = typography(style: "excerpt", text: text)
+        textView.sizeToFit()
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.frame = CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width - 30, height: textView.frame.height)
+        articleView.addSubview(textView)
+        
+        let block2 = UIView(frame: CGRect(x: 0, y: CGFloat(calculateHeightView()+textView.frame.height + block.frame.height), width: articleView.frame.width / 6, height: 5))
+        block2.backgroundColor = UIColor.init(netHex: 0x6DA96D)
+        block2.layer.zPosition = 1
+        block2.center = CGPoint (x: articleView.frame.width / 2, y: CGFloat(calculateHeightView()+textView.frame.height))
+        articleView.addSubview(block2)
+        articleView.contentSize.height += textView.frame.height.rounded()
+    }
+    
+    func getHeader(_ header: Dictionary<String, Any>) {
+        let textView = UITextView(frame: CGRect(x: 0, y: 10, width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
+        textView.attributedText = typography(style: "h1", text: header["headerText"] as! String)
+        textView.sizeToFit()
+        textView.backgroundColor = UIColor.clear
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.frame = CGRect(x: 15, y: 10, width: articleView.frame.size.width - 30, height: textView.frame.height)
+        textView.textAlignment = .center
+        textView.layer.zPosition = 1
+        height = textView.frame.height
+        articleView.addSubview(textView)
+    }
+    
+    func getMeta (_ header: Dictionary<String, Any>){
+        let textView = UITextView(frame: CGRect(x: 0, y: height, width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
+        let str = (header["author"] as? String ?? "") + " · " + (header["date"] as! String)
+        textView.attributedText = typography(style: "meta", text: str.localizedUppercase)
+        textView.sizeToFit()
+        textView.backgroundColor = UIColor.clear
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.frame = CGRect(x: 15, y: height, width: articleView.frame.size.width - 30, height: textView.frame.height)
+        textView.textAlignment = .right
+        textView.layer.zPosition = 1
+        articleView.addSubview(textView)
+    }
+    
+    func getText (text: String, style: String) {
+        let textView = UITextView(frame: CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
+        textView.attributedText = typography(style: style, text: text)
+        textView.sizeToFit()
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.frame = CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width - 30, height: textView.frame.height)
+        articleView.addSubview(textView)
+        if style == "intro" {
+            articleView.contentSize.height = articleView.contentSize.height + textView.frame.height.rounded() + 30
+        } else {
+            articleView.contentSize.height += textView.frame.height.rounded()
+        }
+        
+    }
+    
+    func getImage (url: String, width: Int? = nil, height: Int? = nil, first: Bool? = false){
+        let image = UIImageView()
+        if let _ = width, let _ = height {
+            DispatchQueue.global().async {
+                let url = NSURL(string: url)
+                let data = NSData(contentsOf: url! as URL)
+                DispatchQueue.main.async {
+                    image.image = UIImage(data: data! as Data)
+                }
+            }
+        } else {
+            let url = NSURL(string: url)
+            let data = NSData(contentsOf: url! as URL)
+            image.image = UIImage(data: data! as Data)
+        }
+        let width = width != nil ? CGFloat(width!) : (image.image?.size.width)!
+        let height = height != nil ? CGFloat(height!) : (image.image?.size.height)!
+        if first! {
+            let gradient: CAGradientLayer = CAGradientLayer()
+            gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+            gradient.locations = [0.0 , 1.0]
+            gradient.startPoint = CGPoint(x: 0.0, y: 0.0)
+            gradient.endPoint = CGPoint(x: 0.0, y: 1.0)
+            image.frame = CGRect(x: 0, y: 0, width: articleView.bounds.width, height: calculateNewHeightImage(width: width, height: height))
+            gradient.frame = image.frame
+            gradient.opacity = 0.5
+            image.layer.addSublayer(gradient)
+            
+        } else {
+            image.frame = CGRect(x: 0, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width, height: calculateNewHeightImage(width: width, height: height))
+        }
+        articleView.addSubview(image)
+        articleView.contentSize.height += image.frame.height.rounded()
+    }
+    
+    func calculateNewHeightImage(width: CGFloat, height: CGFloat) -> CGFloat {
+        let scaleFactor = articleView.frame.size.width / CGFloat(width)
+        let newHeight = CGFloat(height) * scaleFactor
+        return CGFloat(newHeight)
+    }
+    
+    func calculateHeightView () -> CGFloat{
+        return articleView.contentSize.height + 20
+    }
+    
+    func typography (style: String, text: String) -> NSAttributedString{
+        switch style {
+        case "h1":
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Lora", size: 20.0)!], range: NSRange(location: 0, length:attributedText.length))
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 4
+            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
+            attributedText.addAttributes([NSForegroundColorAttributeName : UIColor.white], range: NSRange(location: 0, length:attributedText.length))
+            return attributedText
+        case "h2":
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Lora-Bold", size: 18.0)!], range: NSRange(location: 0, length:attributedText.length))
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 4
+            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
+            return attributedText
+        case "p":
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Noto Sans", size: 14.0)!], range: NSRange(location: 0, length:attributedText.length))
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 4
+            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
+            return attributedText
+        case "meta":
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "FiraSans-Light", size: 14.0)!], range: NSRange(location: 0, length:attributedText.length))
+            attributedText.addAttributes([NSForegroundColorAttributeName : UIColor.white], range: NSRange(location: 0, length:attributedText.length))
+            return attributedText
+        case "intro","excerpt":
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "NotoSans-Bold", size: 14.0)!], range: NSRange(location: 0, length:attributedText.length))
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 4
+            paragraphStyle.alignment = NSTextAlignment.center
+            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
+            return attributedText
+        default:
+            let attributedText = NSMutableAttributedString(string: text)
+            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Noto Sans", size: 14.0)!], range: NSRange(location: 0, length: attributedText.length))
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 4
+            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
+            return attributedText
+        }
+    }
+    
+    func removeSpecialCharsFromString(text: String) -> String {
+        let okayChars : Set<Character> =
+            Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ абвгдеёзжиклмонпрстуфхцчьъшщыэюя АБВГДЕЁЖЗИКЛМОПРСТУФХЦЧШЩЬЪЫЭЮЯ1234567890+-*=(),.:!_".characters)
+        return String(text.characters.filter {okayChars.contains($0) })
     }
     
     func getContentHTML (article: XMLElement) -> UIScrollView{
@@ -133,161 +324,6 @@ class Article {
             }
         }
         return articleView
-    }
-    
-    func getExcerpt (text: String){
-        let block = UIView(frame: CGRect(x: 0, y: CGFloat(calculateHeightView()), width: articleView.bounds.width / 6, height: 5))
-        block.backgroundColor = UIColor.init(netHex: 0x6DA96D)
-        block.layer.zPosition = 1
-        block.center = CGPoint (x: articleView.frame.width / 2, y: CGFloat(calculateHeightView()))
-        articleView.addSubview(block)
-        
-        let textView = UITextView(frame: CGRect(x: 15, y: CGFloat(calculateHeightView() + block.frame.height), width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
-        textView.attributedText = typography(style: "excerpt", text: text)
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.frame = CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width - 30, height: textView.frame.height)
-        articleView.addSubview(textView)
-        
-        let block2 = UIView(frame: CGRect(x: 0, y: CGFloat(calculateHeightView()+textView.frame.height + block.frame.height), width: articleView.frame.width / 6, height: 5))
-        block2.backgroundColor = UIColor.init(netHex: 0x6DA96D)
-        block2.layer.zPosition = 1
-        block2.center = CGPoint (x: articleView.frame.width / 2, y: CGFloat(calculateHeightView()+textView.frame.height))
-        articleView.addSubview(block2)
-        articleView.contentSize.height += textView.frame.height.rounded()
-    }
-    
-    func getHeader(_ header: Dictionary<String, Any>) {
-        let textView = UITextView(frame: CGRect(x: 0, y: 10, width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
-        textView.attributedText = typography(style: "h1", text: header["headerText"] as! String)
-        textView.sizeToFit()
-        textView.backgroundColor = UIColor.clear
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.frame = CGRect(x: 15, y: 10, width: articleView.frame.size.width - 30, height: textView.frame.height)
-        textView.textAlignment = .center
-        textView.layer.zPosition = 1
-        height = textView.frame.height
-        articleView.addSubview(textView)
-    }
-    
-    func getMeta (_ header: Dictionary<String, Any>){
-        let textView = UITextView(frame: CGRect(x: 0, y: height, width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
-        let str = (header["author"] as? String ?? "") + " · " + (header["date"] as! String)
-        textView.attributedText = typography(style: "meta", text: str.localizedUppercase)
-        textView.sizeToFit()
-        textView.backgroundColor = UIColor.clear
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.frame = CGRect(x: 15, y: height, width: articleView.frame.size.width - 30, height: textView.frame.height)
-        textView.textAlignment = .right
-        textView.layer.zPosition = 1
-        articleView.addSubview(textView)
-    }
-    
-    func getText (text: String, style: String) {
-        let textView = UITextView(frame: CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width - 30, height: CGFloat.greatestFiniteMagnitude))
-        textView.attributedText = typography(style: style, text: text)
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.frame = CGRect(x: 15, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width - 30, height: textView.frame.height)
-        articleView.addSubview(textView)
-        if style == "intro" {
-            articleView.contentSize.height = articleView.contentSize.height + textView.frame.height.rounded() + 30
-        } else {
-            articleView.contentSize.height += textView.frame.height.rounded()
-        }
-        
-    }
-    
-    func getImage (url: String, first: Bool? = false){
-        let url = NSURL(string: url)
-        let data = NSData(contentsOf: url! as URL)
-        let image = UIImageView()
-        image.image = UIImage(data: data! as Data)
-        if first! {
-            let gradient: CAGradientLayer = CAGradientLayer()
-            gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
-            gradient.locations = [0.0 , 1.0]
-            gradient.startPoint = CGPoint(x: 0.0, y: 0.0)
-            gradient.endPoint = CGPoint(x: 0.0, y: 1.0)
-            image.frame = CGRect(x: 0, y: 0, width: articleView.bounds.width, height: self.calculateHeightImage(sourceImage: image.image!))
-            gradient.frame = image.frame
-            gradient.opacity = 0.5
-            image.layer.addSublayer(gradient)
-            
-        } else {
-            image.frame = CGRect(x: 0, y: CGFloat(calculateHeightView()), width: articleView.frame.size.width, height: self.calculateHeightImage(sourceImage: image.image!))
-        }
-        
-        articleView.addSubview(image)
-        articleView.contentSize.height += image.frame.height.rounded()
-    }
-    
-    func calculateHeightImage (sourceImage: UIImage) -> CGFloat {
-        let oldWidth = sourceImage.size.width
-        let scaleFactor = articleView.frame.size.width / oldWidth
-        let newHeight = sourceImage.size.height * scaleFactor
-        return CGFloat(newHeight)
-    }
-    
-    func calculateHeightView () -> CGFloat{
-        return articleView.contentSize.height + 20
-    }
-    
-    func typography (style: String, text: String) -> NSAttributedString{
-        switch style {
-        case "h1":
-            let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Lora", size: 20.0)!], range: NSRange(location: 0, length:attributedText.length))
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
-            attributedText.addAttributes([NSForegroundColorAttributeName : UIColor.white], range: NSRange(location: 0, length:attributedText.length))
-            return attributedText
-        case "h2":
-            let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Lora-Bold", size: 18.0)!], range: NSRange(location: 0, length:attributedText.length))
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
-            return attributedText
-        case "p":
-            let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Noto Sans", size: 14.0)!], range: NSRange(location: 0, length:attributedText.length))
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
-            return attributedText
-        case "meta":
-            let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "FiraSans-Light", size: 14.0)!], range: NSRange(location: 0, length:attributedText.length))
-            attributedText.addAttributes([NSForegroundColorAttributeName : UIColor.white], range: NSRange(location: 0, length:attributedText.length))
-            return attributedText
-        case "intro","excerpt":
-            let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "NotoSans-Bold", size: 14.0)!], range: NSRange(location: 0, length:attributedText.length))
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            paragraphStyle.alignment = NSTextAlignment.center
-            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
-            return attributedText
-        default:
-            let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttributes([NSFontAttributeName : UIFont(name: "Noto Sans", size: 14.0)!], range: NSRange(location: 0, length: attributedText.length))
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            attributedText.addAttributes([NSParagraphStyleAttributeName : paragraphStyle], range: NSRange(location: 0, length: attributedText.length))
-            return attributedText
-        }
-    }
-    
-    func removeSpecialCharsFromString(text: String) -> String {
-        let okayChars : Set<Character> =
-            Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ абвгдеёзжиклмонпрстуфхцчьъшщыэюя АБВГДЕЁЖЗИКЛМОПРСТУФХЦЧШЩЬЪЫЭЮЯ1234567890+-*=(),.:!_".characters)
-        return String(text.characters.filter {okayChars.contains($0) })
     }
     
 }
