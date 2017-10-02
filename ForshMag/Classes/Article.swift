@@ -11,7 +11,6 @@ import UIKit
 import Alamofire
 import Kanna
 import SwiftSoup
-import SwiftyJSON
 
 class Article {
     
