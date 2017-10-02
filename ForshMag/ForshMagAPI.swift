@@ -59,10 +59,10 @@ class ForshMagAPI {
         }
     }
     
-    func getFeed(forPage page: String, completion: @escaping([Post]) -> ()) {
+    func getFeed(withParameters parameters: [String: Any] = [:], completion: @escaping([Post]) -> ()) {
+        var parameters = parameters
         var posts: [Post] = []
-        let parameters = ["per_page": 10, "page": page] as [String : Any]
-        
+        parameters["per_page"] = 10
         Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/", method: .get, parameters: parameters).responseJSON { response in
             if let result = JSON(response.result.value ?? []).array {
                 result.forEach{
@@ -83,10 +83,10 @@ class ForshMagAPI {
                     if let category = json["categories"].arrayObject {
                         postTemp["category"] = category[0]
                     }
-                    let post = Post(title: postTemp["title"]! as! String,
+                    let post = Post(title: postTemp["title"] as! String,
                                     category: postTemp["category"] as! Int,
                                     url: postTemp["id"] as! Int,
-                                    type: postTemp["type"]! as! String,
+                                    type: postTemp["type"] as! String,
                                     mediaId: postTemp["mediaId"] as! Int)
                     posts.append(post)
                 }

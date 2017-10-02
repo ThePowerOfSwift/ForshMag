@@ -57,7 +57,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func parseJSON (page: String) {
-        ForshMagAPI.sharedInstance.getFeed(forPage: page) { feed in
+        let parameters = ["page": page]
+        ForshMagAPI.sharedInstance.getFeed(withParameters: parameters) { feed in
             self.posts += feed
             self.tableView.reloadData()
         }

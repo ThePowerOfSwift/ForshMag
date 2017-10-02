@@ -479,7 +479,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Y-RQ-Y1k">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Y-RQ-Y1k">
                                                     <rect key="frame" x="0.0" y="4" width="375" height="192"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="192" id="sEm-QI-xKE"/>
@@ -532,7 +532,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="308"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7u7-O0-pB2">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7u7-O0-pB2">
                                                     <rect key="frame" x="37.5" y="4" width="300" height="300"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="300" id="Jo2-Xf-NFw"/>
@@ -585,7 +585,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="138"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6vv-ic-SFU">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6vv-ic-SFU">
                                                     <rect key="frame" x="37.5" y="4" width="130" height="130"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="130" id="ROQ-ec-QRJ"/>
@@ -971,6 +971,6 @@
         <image name="vk" width="29" height="29"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="uu3-y7-41d"/>
+        <segue reference="kaA-u0-Mpg"/>
     </inferredMetricsTieBreakers>
 </document>

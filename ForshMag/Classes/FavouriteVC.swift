@@ -20,106 +20,19 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 134
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         posts.removeAll()
         attemptFetch()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var post: Post!
-        post = posts[indexPath.row]
-        switch (post.type) {
-        case "w4":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                if post.mediaId != 0 {
-                    if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
-                        cell.configureCell(post: post, img: img)
-                        return cell
-                    } else {
-                        cell.configureCell(post: post)
-                        return cell
-                    }
-                } else {
-                    cell.configureCell(post: post)
-                    return cell
-                }
-            } else {
-                return PostCell()
-            }
-        case "w":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw") as? PostCellw {
-                if post.mediaId != 0 {
-                    if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
-                        cell.configureCell(post: post, img: img)
-                        return cell
-                    } else {
-                        cell.configureCell(post: post)
-                        return cell
-                    }
-                } else {
-                    cell.configureCell(post: post)
-                    return cell
-                }
-            } else {
-                return PostCellw()
-            }
-        case "w2":
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellw2") as? PostCellw2 {
-                if post.mediaId != 0 {
-                    if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
-                        cell.configureCell(post: post, img: img)
-                        return cell
-                    } else {
-                        cell.configureCell(post: post)
-                        return cell
-                    }
-                } else {
-                    cell.configureCell(post: post)
-                    return cell
-                }
-            } else {
-                return PostCellw2()
-            }
-        default:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-                cell.configureCell(post: post)
-                return cell
-            } else {
-                return PostCell()
-            }
-        }
-    }
-    
     func getFavourites(ids: [Int]) {
-        let parameters = ["include": ids] as [String : Any]
-        Alamofire.request("http://forshmag.me/wp-json/wp/v2/posts/", method: .get, parameters: parameters).responseJSON { response in
-            if let json = response.result.value! as? Array<Dictionary<String, Any>> {
-                for post in json {
-                    var postTemp: Dictionary<String, Any> = [:]
-                    if let link = post["id"] as? Int{
-                        postTemp["id"] =  link
-                    }
-                    if let title = post["title"] as? Dictionary<String, Any> {
-                        if let rendered = title["rendered"] as? String{
-                            postTemp["title"] = rendered
-                        }
-                    }
-                    if let acf = post["acf"] as? Dictionary<String, Any> {
-                        if let thumb = acf["thumb-size"] as? String {
-                            postTemp["type"] = thumb
-                        }
-                    }
-                    if let mediaId = post["featured_media"] as? Int {
-                        postTemp["mediaId"] = mediaId
-                    }
-                    if let categories = post["categories"] as? Array<Int> {
-                        postTemp["categories"] = categories[0]
-                    }
-                    let post = Post(title: postTemp["title"]! as! String, category: postTemp["categories"] as! Int, url: postTemp["id"] as! Int, type: postTemp["type"]! as! String, mediaId: postTemp["mediaId"] as! Int)
-                    self.posts.append(post)
-                }              
-            }
+        let parameters = ["include": ids]
+        ForshMagAPI.sharedInstance.getFeed(withParameters: parameters) { posts in
+            self.posts += posts
             self.tableView.reloadData()
         }
     }
@@ -134,12 +47,10 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 //context.delete(i)
             }
         } catch {
-            
         }
         getFavourites(ids: ids)
-        
-        
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PostVC" {
             if let detailVC = segue.destination as? PostVC {
@@ -147,6 +58,39 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     detailVC.post = post
                 }
             }
+        }
+    }
+    
+    // MARK: - UITableViewDelegate & DataSource
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let post = posts[indexPath.row]
+        let postCell: PostCellFactory
+        switch (post.type) {
+        case "w":
+            postCell = PostCellHelper.factory(for: .w)
+        case "w2":
+            postCell = PostCellHelper.factory(for: .w2)
+        default:
+            postCell = PostCellHelper.factory(for: .w4)
+        }
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: postCell().name()) as? PostCellProtocol {
+            if post.mediaId != 0 {
+                if let img = FeedVC.imageCache.object(forKey: "\(post.mediaId)" as NSString) {
+                    cell.configureCell(post: post, img: img)
+                } else {
+                    ForshMagAPI.sharedInstance.imageLoader(mediaId: post.mediaId) { image in
+                        cell.configureCell(post: post, img: image)
+                    }
+                }
+                return cell as! UITableViewCell
+            } else {
+                cell.configureCell(post: post, img: nil)
+                return cell as! UITableViewCell
+            }
+        } else {
+            return UITableViewCell()
         }
     }
     
@@ -159,8 +103,5 @@ class FavouriteVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
-    }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
     }
 }
