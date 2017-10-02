@@ -44,4 +44,11 @@ class PostCellw2: UITableViewCell, PostCellProtocol {
             postImg.image = UIImage(named: "empty.png")
         }
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        postHeader.text = nil
+        categoryLbl.text = nil
+        postImg.image = nil
+    }
 }

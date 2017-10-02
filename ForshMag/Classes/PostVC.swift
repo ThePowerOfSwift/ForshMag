@@ -28,10 +28,12 @@ class PostVC: UIViewController {
         articleView = Article (bounds: mainView.bounds)
         self.title = post.category
         var view = UIView()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         ForshMagAPI.sharedInstance.getPost(withId: self.post.urlId, completion: { post in
             view = self.articleView.getPostView(article: post)
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.mainView.addSubview(view)
             }
         })

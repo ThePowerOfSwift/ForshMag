@@ -41,12 +41,14 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func refresh() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         DispatchQueue.global(qos: .background).async {
             self.posts.removeAll()
             self.currentPage = 1
             self.parseJSON(page: "\(self.currentPage)")
             
             DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.refreshControl.endRefreshing()
                 self.isFiltered = false
                 self.tableView.reloadData()
@@ -128,6 +130,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         performSegue(withIdentifier: "PostVC", sender: post)
     }
+    
+    
     
     // MARK: - FiltersByCategory
     
